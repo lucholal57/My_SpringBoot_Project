@@ -13,7 +13,7 @@ public class UserEntity {
  Por otra parte usamos nulleable para evitar que la base de datos haga la validacion y directamente salga desde aquí.
   */
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, unique = true)
     private String username;
