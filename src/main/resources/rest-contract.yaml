@@ -1,0 +1,194 @@
+openapi: 3.0.3
+info:
+  title: SpringBootProject RES API - OpenAPI 3.0
+  description: |-
+    Descripcion de mi Contrato
+    
+      links:
+     - [Ejemplos Google](https://www.google.com)
+
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+
+  #Servers: de localhost para utilizar con la DB
+servers:
+  - url: https://localhost:8080/api/v1
+
+  #Tags: Para los accesos a los endpoints, con nombre y descripcion estos van a contener las rutas a las peticiones ejemplos GET,POST,PUT,DELETE.
+tags:
+
+  - name: backoffice
+    description: Creacion de productos, categorias, etc.
+
+  - name: store
+    description: Acceso a la tienda
+
+  - name: user
+    description: Operaciones con usuarios
+
+  #Paths puntos de accesos
+paths:
+  /user:
+    post:
+      #Este tags es para vincularlo con el que generamos arriba en el apartado de tags
+      tags:
+        - user
+      #Sumaary descripcion de lo que hace.
+      summary: Creacion de Usuario
+      #Descripcion si quisiera mas, se ve a la hora de desplegar en el metodo en la interfaz.
+      description: Endpoint Post para creacion de un usuario.
+      #OperationId es el nombre con el cual se va a generar este metodo para usarlo desde un Usercontroller en el backend. Ese Usercontroller lo genera para el path en este caso /user.
+      operationId: createUser
+      #requestBody sirve para recibir data que me van a enviar desde el front. Esto lo que hace es modelar el metodo Createuser que se genera por el operationID para recibir esos datos y modelarlos.
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestDTO'
+      responses:
+        '200':
+          description: Operacion Exitosa, respuesta UserResponseDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRequestDTO'
+
+    get:
+      tags:
+        - user
+      summary: Obtener todos los Usuarios
+      description: Endpoint GET para pedidos de un usuario.
+      operationId: getAllUser
+      #A ser un metodo GET el requestBody no es necesario ya que no voy a mandar nada por url
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              #En el schema del response utilizamos el UserListDTO modelo de schema que generamos en los       component.
+              schema:
+                $ref: '#/components/schemas/UserListDTO'
+
+
+
+#Componentes para definir los schemas y referenciarlos.
+components:
+  schemas:
+    #schema UserDTO para el modelado de Usuario. Leagregamos el DTO para identificar que este es el modelo de transferencia con el que vamos a trabajar. Ejemplos UserEntity: Modelo de db. UserDTO: Modelo de transferencia
+    UserRequestDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: 'MyS3cr3tP@ssword'
+        dateCreated:
+          type: string
+          #Format se usa para validar que lo que recibe sea del mismo tipo.
+          format: date
+          example: '20230-03-10'
+        dateDeleted:
+          type: string
+          format: date
+          example: '20230-03-10'
+      #Required a la altura de propiedades nos brinda la posibilidad de pasarle el atributos que queremos que sean requeridos, en este caso el unico que no es requerido es el dateDeleted.
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
+        - dateCreated
+        - dataDeleted
+
+    #Creamos un modelo para hacer una lista de usuario y poder responder a los GET ya que estos devuelven LISTAS si es que no espeficicamos y mandamos un ID para recibir uno en particular.
+    UserListDTO:
+      #Lista tipo Array
+      type: array
+      #En los items hacemos referencia al modelo UserDTO, osea es una lista de UserDTO
+      items:
+        $ref: '#/components/schemas/UserRequestDTO'
+
+    JWTResponseDTO:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+    EmptyResponseDTO:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+          example: '2023-02-01 24:00:00'
+    ErrorResponseDTO:
+      type: array
+      items:
+        $ref: '#/components/schemas/ErrorItemDTO'
+    ErrorItemDTO:
+      type: object
+      properties:
+        code:
+          type: string
+        link:
+          type: string
+        detail:
+          type: string
+    MetaInformationResponseDTO:
+      required:
+        - time
+      type: object
+      properties:
+        time:
+          type: integer
+          format: int64
+        refNumber:
+          type: string
+
+    ResponseContainerResponseDTO:
+      required:
+        - meta
+        - type
+      type: object
+      properties:
+        errors:
+          $ref: '#/components/schemas/ErrorResponseDTO'
+        meta:
+          $ref: '#/components/schemas/MetaInformationResponseDTO'
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

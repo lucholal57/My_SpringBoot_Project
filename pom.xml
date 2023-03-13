@@ -12,13 +12,13 @@
     <artifactId>SpringBootProject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SpringBootProject</name>
-    <description>Proyej SrpingBoot EducacionIt</description>
+    <description>Project SrpingBoot EducacionIt</description>
     <properties>
         <java.version>19</java.version>
         <mainclass>com.SpringBootProject.app.SpringBootProjectApplication</mainclass>
     </properties>
     <dependencies>
-
+        <!-- Dependencia para usar Base de Datos, generando los Entities en tablas-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -35,7 +35,12 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-
+        <!-- Dependencia para usar JWT Token-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- Dependencia Conector Mysql -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
@@ -47,19 +52,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.4</version>
-        </dependency>
-
+        <!-- Dependencia para Base de datos en Memoria-->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        <!-- Dependencia ORM para utilizar con JPA en la creacion de las tablas por Entities-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -71,6 +70,36 @@
             <artifactId>spring-data-commons</artifactId>
             <version>2.7.7</version>
         </dependency>
+        <!-- Dependencia para usar JWT Token-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+        <!-- Dependencia para usar Swagger Contrato INICIO-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-data-rest</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-javadoc</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <!-- Dependencia para usar Swagger Contrato FIN-->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.4</version>
+        </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -81,28 +110,23 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-
+        <!-- Dependencia para usar Test Unitarios-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <!-- Dependencia para Test de integracion????-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
+        <!-- Plugin de Maven-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -111,6 +135,36 @@
                     <mainClass>${mainclass}</mainClass>
                 </configuration>
             </plugin>
+            <!-- Plugin de Swagger Generador en Maven-->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <!-- RELEASE_VERSION -->
+                <version>6.0.0</version>
+                <!-- /RELEASE_VERSION -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Ubicacion del Contrato Yamel-->
+                            <inputSpec>${project.basedir}/src/main/resources/rest-contract.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <!-- Ignore de archivos Swagger Generador para ignorar codigo que ya tenemos codificado -->
+                            <ignoreFileOverride>${project.basedir}/src/swagger/ignore</ignoreFileOverride>
+                            <configOptions>
+                                <!-- Option para generar los Delegater-->
+                                <delegatePattern>true</delegatePattern>
+                                <dateLibrary>legacy</dateLibrary>
+                                <!-- Carpeta donde va a crear las carpetas Model, API, Configuracion-->
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
