@@ -30,7 +30,7 @@ public class CategoryEntity {
     public CategoryEntity() {
     }
 
-    public CategoryEntity(Long id, String name, CategoryEntity parent_category, Date date_created, Date date_deleted) {
+    public CategoryEntity(Long id, String name, CategoryEntity parent, Date date_created, Date date_deleted) {
         this.id = id;
         this.name = name;
         this.parent = parent;
@@ -58,7 +58,7 @@ public class CategoryEntity {
         return parent;
     }
 
-    public void setParent(CategoryEntity parent_category) {
+    public void setParent(CategoryEntity parent) {
         this.parent = parent;
     }
 

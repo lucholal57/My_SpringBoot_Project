@@ -3,7 +3,7 @@ package com.SpringBootProject.app.controller;
 import com.SpringBootProject.app.entity.UserEntity;
 import com.SpringBootProject.app.service.UserService;
 import org.openapitools.api.UserApiDelegate;
-import org.openapitools.model.UserRequestDTO;
+import org.openapitools.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class UserController implements UserApiDelegate {
     public UserController(){
     }
     @Override
-    public ResponseEntity<UserRequestDTO> createUser(UserRequestDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(UserDTO userDTO) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }

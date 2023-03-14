@@ -53,14 +53,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequestDTO'
+              $ref: '#/components/schemas/UserDTO'
       responses:
         '200':
           description: Operacion Exitosa, respuesta UserResponseDTO
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserRequestDTO'
+                $ref: '#/components/schemas/UserDTO'
 
     get:
       tags:
@@ -84,7 +84,7 @@ paths:
 components:
   schemas:
     #schema UserDTO para el modelado de Usuario. Leagregamos el DTO para identificar que este es el modelo de transferencia con el que vamos a trabajar. Ejemplos UserEntity: Modelo de db. UserDTO: Modelo de transferencia
-    UserRequestDTO:
+    UserDTO:
       type: object
       properties:
         id:
@@ -117,21 +117,84 @@ components:
           example: '20230-03-10'
       #Required a la altura de propiedades nos brinda la posibilidad de pasarle el atributos que queremos que sean requeridos, en este caso el unico que no es requerido es el dateDeleted.
       required:
-        - username
+        -  username
         - firstName
         - lastName
         - email
         - password
         - dateCreated
         - dataDeleted
-
     #Creamos un modelo para hacer una lista de usuario y poder responder a los GET ya que estos devuelven LISTAS si es que no espeficicamos y mandamos un ID para recibir uno en particular.
     UserListDTO:
       #Lista tipo Array
       type: array
       #En los items hacemos referencia al modelo UserDTO, osea es una lista de UserDTO
       items:
-        $ref: '#/components/schemas/UserRequestDTO'
+        $ref: '#/components/schemas/UserDTO'
+
+    ProductDTO:
+      type: object
+      title: ProductDTO
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Product Name"
+        description:
+          type: string
+          example: "This is a product description."
+        category:
+          $ref: "#/components/schemas/CategoryDTO"
+        price:
+          type: number
+          example: 29.99
+        qty:
+          type: integer
+          example: 100
+        date_created:
+          type: string
+          format: date-time
+          example: "2023-03-10T14:30:00Z"
+        date_deleted:
+          type: string
+          format: date-time
+          example: "2023-03-12T09:45:00Z"
+
+    ProductListDTO:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProductDTO'
+
+    CategoryDTO:
+      type: object
+      title: CategoryDTO
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Category Name"
+        parent:
+          $ref: "#/components/schemas/CategoryDTO"
+        date_created:
+          type: string
+          format: date-time
+          example: "2023-03-10T14:30:00Z"
+        date_deleted:
+          type: string
+          format: date-time
+          example: "2023-03-12T09:45:00Z"
+
+    CategoryListDTO:
+      type: array
+      items:
+        $ref: '#/components/schemas/CategoryDTO'
+
 
     JWTResponseDTO:
       type: object
