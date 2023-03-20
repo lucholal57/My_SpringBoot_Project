@@ -41,6 +41,8 @@ paths:
       #Este tags es para vincularlo con el que generamos arriba en el apartado de tags
       tags:
         - user
+      security:
+        - bearerAuth: [ ]
       #Sumaary descripcion de lo que hace.
       summary: Creacion de Usuario
       #Descripcion si quisiera mas, se ve a la hora de desplegar en el metodo en la interfaz.
@@ -60,11 +62,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/ResponseContainerUserDTO'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
 
     get:
       tags:
         - user
+      security:
+        - bearerAuth: [ ]
       summary: Obtener todos los Usuarios
       description: Endpoint GET para pedidos de un usuario.
       operationId: getAllUser
@@ -76,7 +83,7 @@ paths:
             application/json:
               #En el schema del response utilizamos el UserListDTO modelo de schema que generamos en los       component.
               schema:
-                $ref: '#/components/schemas/UserListDTO'
+                $ref: '#/components/schemas/ResponseContainerUserListDTO'
 
 
 
@@ -127,10 +134,13 @@ components:
     #Creamos un modelo para hacer una lista de usuario y poder responder a los GET ya que estos devuelven LISTAS si es que no espeficicamos y mandamos un ID para recibir uno en particular.
     UserListDTO:
       #Lista tipo Array
-      type: array
+      type: object
+      properties:
       #En los items hacemos referencia al modelo UserDTO, osea es una lista de UserDTO
-      items:
-        $ref: '#/components/schemas/UserDTO'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDTO'
 
     ProductDTO:
       type: object
@@ -234,7 +244,7 @@ components:
         refNumber:
           type: string
 
-    ResponseContainerResponseDTO:
+    ResponseContainerUserDTO:
       required:
         - meta
         - type
@@ -242,6 +252,21 @@ components:
       properties:
         errors:
           $ref: '#/components/schemas/ErrorResponseDTO'
+        data:
+          $ref: '#/components/schemas/UserDTO'
+        meta:
+          $ref: '#/components/schemas/MetaInformationResponseDTO'
+
+    ResponseContainerUserListDTO:
+      required:
+        - meta
+        - type
+      type: object
+      properties:
+        errors:
+          $ref: '#/components/schemas/ErrorResponseDTO'
+        data:
+          $ref: '#/components/schemas/UserListDTO'
         meta:
           $ref: '#/components/schemas/MetaInformationResponseDTO'
 
@@ -254,4 +279,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+security:
+  - bearerAuth: []
 

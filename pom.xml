@@ -122,6 +122,15 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+        </dependency>
 
     </dependencies>
 
@@ -137,27 +146,36 @@
             </plugin>
             <!-- Plugin de Swagger Generador en Maven-->
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>${mainclass}</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <!-- RELEASE_VERSION -->
                 <version>6.0.0</version>
-                <!-- /RELEASE_VERSION -->
                 <executions>
                     <execution>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <!-- Ubicacion del Contrato Yamel-->
                             <inputSpec>${project.basedir}/src/main/resources/rest-contract.yaml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <!-- Ignore de archivos Swagger Generador para ignorar codigo que ya tenemos codificado -->
+                            <apiPackage>com.SpringBootProject.app.api</apiPackage>
+                            <modelPackage>com.SpringBootProject.app.model</modelPackage>
                             <ignoreFileOverride>${project.basedir}/src/swagger/ignore</ignoreFileOverride>
+                            <generateApiDocumentation>true</generateApiDocumentation>
+                            <generateModelDocumentation>true</generateModelDocumentation>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <library>spring-boot</library>
                             <configOptions>
-                                <!-- Option para generar los Delegater-->
+                                <useSwaggerUI>true</useSwaggerUI>
+                                <annotationLibrary>swagger2</annotationLibrary>
+                                <dateLibrary>java8</dateLibrary>
                                 <delegatePattern>true</delegatePattern>
-                                <dateLibrary>legacy</dateLibrary>
-                                <!-- Carpeta donde va a crear las carpetas Model, API, Configuracion-->
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
                         </configuration>
