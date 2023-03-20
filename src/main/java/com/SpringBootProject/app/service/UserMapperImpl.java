@@ -2,6 +2,7 @@ package com.SpringBootProject.app.service;
 
 import com.SpringBootProject.app.entity.UserEntity;
 import com.SpringBootProject.app.model.UserDTO;
+import com.SpringBootProject.app.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,10 +31,10 @@ public class UserMapperImpl implements UserMapper{
         response.setFirstName(theUser.getFirstName());
         response.setLastName(theUser.getLastName());
         if(theUser.getDateCreated() != null) {
-            response.setDateCreated(Date.from(theUser.getDateCreated().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            response.setDateCreated(DateUtils.toDate(theUser.getDateCreated()));
         }
         if(theUser.getDateDeleted() != null) {
-            response.setDateDeleted(Date.from(theUser.getDateDeleted().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            response.setDateDeleted(DateUtils.toDate(theUser.getDateDeleted()));
         }
         return response;
     }
@@ -41,7 +42,6 @@ public class UserMapperImpl implements UserMapper{
     public UserEntity mapUserEncoded(final UserDTO theUser){
         LOGGER.trace(String.format("Mapeo encodeado de UserDTO a UserEntity : %s", theUser.toString()));
         UserEntity response = new UserEntity();
-        theUser.setPassword(encoder.encode(theUser.getPassword()));
         response.setId(theUser.getId());
         response.setUsername(theUser.getUsername());
         response.setPassword(encoder.encode(theUser.getPassword()));
@@ -49,10 +49,10 @@ public class UserMapperImpl implements UserMapper{
         response.setFirstName(theUser.getFirstName());
         response.setLastName(theUser.getLastName());
         if(theUser.getDateCreated() != null) {
-            response.setDateCreated(Date.from(theUser.getDateCreated().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            response.setDateCreated(DateUtils.toDate(theUser.getDateCreated()));
         }
         if(theUser.getDateDeleted() != null) {
-            response.setDateDeleted(Date.from(theUser.getDateDeleted().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            response.setDateDeleted(DateUtils.toDate(theUser.getDateDeleted()));
         }
         return response;
     }
@@ -67,11 +67,11 @@ public class UserMapperImpl implements UserMapper{
         response.setFirstName(theUser.getFirstName());
         response.setLastName(theUser.getLastName());
         if(theUser.getDateCreated() != null) {
-            LocalDate createLocalDate = theUser.getDateCreated().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate createLocalDate = DateUtils.toLocalDate(theUser.getDateCreated());
             response.setDateCreated(createLocalDate);
         }
         if(theUser.getDateCreated() != null) {
-            LocalDate deleteLocalDate = theUser.getDateDeleted().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate deleteLocalDate = DateUtils.toLocalDate(theUser.getDateDeleted());
             response.setDateDeleted(deleteLocalDate);
         }
         return response;

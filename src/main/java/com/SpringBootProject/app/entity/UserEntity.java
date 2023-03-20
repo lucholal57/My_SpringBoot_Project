@@ -1,5 +1,7 @@
 package com.SpringBootProject.app.entity;
 
+import org.apache.commons.lang3.Validate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -97,6 +99,7 @@ public class UserEntity {
     }
 
     public void setPassword(String password) {
+        Validate.notBlank(password,"El password no puede ser null o vacio");
         this.password = password;
     }
 
