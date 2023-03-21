@@ -2,6 +2,7 @@ package com.SpringBootProject.app.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,9 +20,8 @@ public class CartEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Column(nullable = false)
-    private List<ProductEntity> products;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<CartDetailEntity> cartItems = new ArrayList<>();
     @Column(nullable = false)
     private Date date_created;
     @Column(nullable = true)
@@ -30,10 +30,14 @@ public class CartEntity {
     public CartEntity() {
     }
 
-    public CartEntity(Long id, UserEntity user, List<ProductEntity> products, Date date_created, Date date_deleted) {
+    public CartEntity(Long id, UserEntity user, String description,
+                      BigDecimal price, List<CartDetailEntity> cartItems,
+                      Date date_created, Date date_deleted) {
         this.id = id;
         this.user = user;
-        this.products = products;
+        this.description = description;
+        this.price = price;
+        this.cartItems = cartItems;
         this.date_created = date_created;
         this.date_deleted = date_deleted;
     }
@@ -70,12 +74,12 @@ public class CartEntity {
         this.price = price;
     }
 
-    public List<ProductEntity> getProducts() {
-        return products;
+    public List<CartDetailEntity> getCartItems() {
+        return cartItems;
     }
 
-    public void setProducts(List<ProductEntity> products) {
-        this.products = products;
+    public void setCartItems(List<CartDetailEntity> cartItems) {
+        this.cartItems = cartItems;
     }
 
     public Date getDate_created() {
@@ -92,18 +96,5 @@ public class CartEntity {
 
     public void setDate_deleted(Date date_deleted) {
         this.date_deleted = date_deleted;
-    }
-
-    @Override
-    public String toString() {
-        return "CartEntity{" +
-                "id=" + id +
-                ", user=" + user +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", products=" + products +
-                ", date_created=" + date_created +
-                ", date_deleted=" + date_deleted +
-                '}';
     }
 }

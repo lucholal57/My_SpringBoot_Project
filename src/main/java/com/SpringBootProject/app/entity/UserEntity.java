@@ -3,6 +3,7 @@ package com.SpringBootProject.app.entity;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -27,7 +28,9 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<RoleEntity> roles;
+    @Column(nullable = true)
     private Date dateCreated;
     @Column(nullable = true)
     private Date dateDeleted;
@@ -41,19 +44,19 @@ public class UserEntity {
     Constructor con parametros
      */
 
-    public UserEntity(Long id, String username,
-                      String firstName, String lastName, String email,
-                      String password, Date dateCreated,
-                      Date dateDeleted) {
+    public UserEntity(Long id, String username, String firstName, String lastName, String email,
+                      String password, Collection<RoleEntity> roles, Date dateCreated, Date dateDeleted) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.roles = roles;
         this.dateCreated = dateCreated;
         this.dateDeleted = dateDeleted;
     }
+
     /*
     Setters and Getters
      */
@@ -90,17 +93,29 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    public String getEmail() { return email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public void setEmail(String email) { this.email = email; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        Validate.notBlank(password,"El password no puede ser null o vacio");
+        Validate.notBlank(password, "El password no puede ser null o vacio");
         this.password = password;
+    }
+
+    public Collection<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<RoleEntity> roles) {
+        this.roles = roles;
     }
 
     public Date getDateCreated() {
@@ -121,15 +136,6 @@ public class UserEntity {
 
     @Override
     public String toString() {
-        return "UserEntity{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", dateCreated=" + dateCreated +
-                ", dateDeleted=" + dateDeleted +
-                '}';
+        return "UserEntity{" + "id=" + id + ", username='" + username + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", password='" + password + '\'' + ", dateCreated=" + dateCreated + ", dateDeleted=" + dateDeleted + '}';
     }
 }

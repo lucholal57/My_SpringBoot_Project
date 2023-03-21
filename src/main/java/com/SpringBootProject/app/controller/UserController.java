@@ -1,6 +1,6 @@
 package com.SpringBootProject.app.controller;
 
-import com.SpringBootProject.app.api.UserApiDelegate;
+import com.SpringBootProject.app.api.UsersApiDelegate;
 import com.SpringBootProject.app.model.*;
 import com.SpringBootProject.app.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -8,10 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class UserController implements UserApiDelegate {
+public class UserController extends BaseController implements UsersApiDelegate {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private UserService userService;
@@ -20,29 +19,24 @@ public class UserController implements UserApiDelegate {
 
     }
 
-    public ResponseEntity<ResponseContainerUserDTO> createUser(UserDTO userDTO) {
+    public ResponseEntity<ResponseContainerDTO> createUser(UserRequestDTO userDTO) {
+        Long start = System.currentTimeMillis();
         LOGGER.debug("CREAR");
-        ResponseContainerUserDTO responseContainer = new ResponseContainerUserDTO();
+        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
         try {
             UserDTO response = userService.createUser(userDTO);
             responseContainer.data(response);
-            return new ResponseEntity<ResponseContainerUserDTO>(responseContainer,HttpStatus.CREATED);
-        }catch (Exception e) {
-            LOGGER.error("Ocurrio un error al crear usuario", e);
-            List<ErrorItemDTO> errorList = new ArrayList<>();
-            ErrorItemDTO errorItem = new ErrorItemDTO();
-            errorItem.setCode("A1");
-            errorItem.setDetail(e.getMessage());
-            errorList.add(errorItem);
-            responseContainer.errors(errorList);
-           ResponseEntity error = new ResponseEntity(responseContainer,HttpStatus.BAD_REQUEST);
-            return error;
+            responseContainer.setMeta(buildMeta(start));
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
+        } catch (Exception e) {
+            LOGGER.error(String.format("An error occurred creating a user: \"%s\" ", userDTO), e);
+            return buildErrorResponse(responseContainer, HttpStatus.BAD_REQUEST, e, "A1", start);
         }
     }
 
-    public ResponseEntity<ResponseContainerUserListDTO> getAllUser() {
+    public ResponseEntity<ResponseContainerDTO> getAllUser() {
         LOGGER.debug("LISTAR");
-        ResponseContainerUserListDTO responseContainer = new ResponseContainerUserListDTO();
+        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
         try {
             List<UserDTO> listUser = userService.getAllUser();
             UserListDTO response = new UserListDTO();
@@ -51,7 +45,7 @@ public class UserController implements UserApiDelegate {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
         } catch (Exception e) {
             LOGGER.error("Ocurrio un error al listar usuarios", e);
-            LOGGER.error(String.format("An error occurred listing uses"), e);
+            LOGGER.error("An error occurred listing uses", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseContainer);
 
         }

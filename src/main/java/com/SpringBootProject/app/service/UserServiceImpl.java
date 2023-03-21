@@ -2,19 +2,15 @@ package com.SpringBootProject.app.service;
 
 import com.SpringBootProject.app.entity.UserEntity;
 import com.SpringBootProject.app.model.UserDTO;
+import com.SpringBootProject.app.model.UserRequestDTO;
 import com.SpringBootProject.app.repository.UserRepository;
 import org.apache.commons.lang3.Validate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
 import java.util.*;
-import java.time.ZoneId;
-
 
 
 @Service
@@ -35,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     }
     @Override
-    public UserDTO createUser(UserDTO theUser) {
+    public UserDTO createUser(UserRequestDTO theUser) {
         //validacion que el usuario no sea null
         Validate.notNull(theUser,"El usuario no puede ser NULO");
         LOGGER.trace(String.format("Creacion de usuario : %s", theUser.toString()));
@@ -46,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAllUser() {
-        LOGGER.trace(String.format("Lista de usuarios"));
+        LOGGER.trace("Lista de usuarios");
         Iterable<UserEntity> users = userRepository.findAll();
         Iterator<UserEntity> iter = users.iterator();
         List<UserDTO> response = new ArrayList<>();
