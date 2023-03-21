@@ -53,8 +53,8 @@ public class TokenController extends BaseController implements TokenApiDelegate 
         }
     }
 
-    private ResponseEntity<ResponseContainerDTO> responseTokens(Long start,
-                                                                        ResponseContainerDTO response, Map<String, String> tokens) {
+    private ResponseEntity<ResponseContainerDTO> responseTokens(Long start, ResponseContainerDTO response,
+                                                                Map<String, String> tokens) {
         HttpHeaders headers = new HttpHeaders();
         tokens.forEach(headers::add);
         JWTResponseDTO jwtResponse = new JWTResponseDTO();

@@ -1,5 +1,6 @@
 package com.SpringBootProject.app.conf;
 
+import com.SpringBootProject.app.controller.CartController;
 import com.SpringBootProject.app.controller.TokenController;
 import com.SpringBootProject.app.controller.UserController;
 import com.SpringBootProject.app.repository.UserRepository;
@@ -66,6 +67,11 @@ public class AppConfig {
     public UserAuthenticationService getUserAuthenticationService(PasswordEncoder passwordEncoder,
                                                                   JWTService jwtService, UserDetailsService userDetailsService) {
         return new UserAuthenticationServiceImpl(passwordEncoder, jwtService, userDetailsService);
+    }
+
+    @Bean
+    public CartController getCartController(){
+        return new CartController();
     }
 
 }
