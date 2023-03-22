@@ -3,8 +3,8 @@ package com.SpringBootProject.app.controller;
 import com.SpringBootProject.app.api.TokenApiDelegate;
 import com.SpringBootProject.app.model.JWTResponseDTO;
 import com.SpringBootProject.app.model.ResponseContainerDTO;
-import com.SpringBootProject.app.service.JWTService;
-import com.SpringBootProject.app.service.UserAuthenticationService;
+import com.SpringBootProject.app.service.jwt.JWTService;
+import com.SpringBootProject.app.service.user.UserAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -16,12 +16,12 @@ import java.util.Map;
 public class TokenController extends BaseController implements TokenApiDelegate {
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenController.class);
 
-    private final UserAuthenticationService userAuthenticationService;
+    private final UserAuthService userAuthService;
     private final JWTService jwtService;
 
-    public TokenController(UserAuthenticationService theUserAuthenticationService,
+    public TokenController(UserAuthService theUserAuthService,
                            JWTService theJwtService) {
-        userAuthenticationService = theUserAuthenticationService;
+        userAuthService = theUserAuthService;
         jwtService = theJwtService;
     }
 
@@ -31,7 +31,7 @@ public class TokenController extends BaseController implements TokenApiDelegate 
         LOGGER.debug("login");
         ResponseContainerDTO response = new ResponseContainerDTO();
         try {
-            Map<String, String> tokens = userAuthenticationService.login(username, password);
+            Map<String, String> tokens = userAuthService.login(username, password);
             return responseTokens(start, response, tokens);
         } catch (Exception e) {
             LOGGER.error(String.format("Login failed for user: \"%s\" pwd: \"%s\" ", username, password), e);

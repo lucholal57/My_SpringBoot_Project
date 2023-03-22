@@ -1,4 +1,4 @@
-package com.SpringBootProject.app.service;
+package com.SpringBootProject.app.service.jwt;
 
 import java.util.Map;
 

@@ -1,5 +1,6 @@
-package com.SpringBootProject.app.service;
+package com.SpringBootProject.app.service.jwt;
 
+import com.SpringBootProject.app.service.jwt.JWTService;
 import com.SpringBootProject.app.utils.JwtTokenUtil;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class JWTServiceImpl implements JWTService{
+public class JWTServiceImpl implements JWTService {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsService userDetailsService;
 

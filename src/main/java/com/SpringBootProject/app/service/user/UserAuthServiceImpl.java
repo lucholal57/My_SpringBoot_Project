@@ -1,5 +1,6 @@
-package com.SpringBootProject.app.service;
+package com.SpringBootProject.app.service.user;
 
+import com.SpringBootProject.app.service.jwt.JWTService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,14 +8,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Map;
 
-public class UserAuthenticationServiceImpl implements UserAuthenticationService {
+public class UserAuthServiceImpl implements UserAuthService {
     private JWTService jwtService;
     private PasswordEncoder passwordEncoder;
     private UserDetailsService userDetailService;
 
 
-    public UserAuthenticationServiceImpl(PasswordEncoder thePasswordEncoder, JWTService theJwtService,
-                                         UserDetailsService theUserDetailsService) {
+    public UserAuthServiceImpl(PasswordEncoder thePasswordEncoder, JWTService theJwtService,
+                               UserDetailsService theUserDetailsService) {
         passwordEncoder = thePasswordEncoder;
         jwtService = theJwtService;
         userDetailService = theUserDetailsService;

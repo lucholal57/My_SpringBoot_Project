@@ -1,8 +1,9 @@
-package com.SpringBootProject.app.service;
+package com.SpringBootProject.app.service.mapper;
 
 import com.SpringBootProject.app.entity.UserEntity;
 import com.SpringBootProject.app.model.UserDTO;
 import com.SpringBootProject.app.model.UserRequestDTO;
+import com.SpringBootProject.app.service.user.UserAdminServiceImpl;
 import com.SpringBootProject.app.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +13,9 @@ import java.time.LocalDate;
 import java.util.Date;
 
 
-public class UserMapperImpl implements UserMapper{
+public class UserMapperImpl implements UserMapper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserAdminServiceImpl.class);
 
     private PasswordEncoder encoder;
 

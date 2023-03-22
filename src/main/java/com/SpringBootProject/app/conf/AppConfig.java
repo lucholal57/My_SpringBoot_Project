@@ -4,9 +4,15 @@ import com.SpringBootProject.app.controller.CartController;
 import com.SpringBootProject.app.controller.TokenController;
 import com.SpringBootProject.app.controller.UserController;
 import com.SpringBootProject.app.repository.UserRepository;
-import com.SpringBootProject.app.service.*;
+import com.SpringBootProject.app.service.jwt.JWTService;
+import com.SpringBootProject.app.service.jwt.JWTServiceImpl;
+import com.SpringBootProject.app.service.mapper.UserMapper;
+import com.SpringBootProject.app.service.mapper.UserMapperImpl;
+import com.SpringBootProject.app.service.user.UserAuthService;
+import com.SpringBootProject.app.service.user.UserAuthServiceImpl;
+import com.SpringBootProject.app.service.user.UserAdminService;
+import com.SpringBootProject.app.service.user.UserAdminServiceImpl;
 import com.SpringBootProject.app.utils.JwtTokenUtil;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -15,8 +21,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.security.SecureRandom;
 
 @Configuration
 public class AppConfig {
@@ -31,9 +35,14 @@ public class AppConfig {
         return http.build();
     }
 
+    /*
+    Creamos el Bean de UserController para poder acceder al Controller quien es el encargado de manejar
+    las peticiones, y este usa como parametro el UserAdminService quien se encarga de darnos el CRUDservice
+    que creamos y lo implementa el UserAdminImpl
+     */
     @Bean
-    public UserController getUserController(UserService userService) {
-        return new UserController(userService);
+    public UserController getUserController(UserAdminService userAdminService) {
+        return new UserController(userAdminService);
     }
 
     @Bean
@@ -48,14 +57,14 @@ public class AppConfig {
 
     @Primary
     @Bean
-    public UserService getUserService(UserMapper userMapper,UserRepository userRepository) {
-        return new UserServiceImpl(userMapper, userRepository);
+    public UserAdminService getUserService(UserMapper userMapper, UserRepository userRepository) {
+        return new UserAdminServiceImpl(userMapper, userRepository);
     }
 
     @Bean
-    public TokenController getTokenController(UserAuthenticationService userAuthenticationService,
+    public TokenController getTokenController(UserAuthService userAuthService,
                                               JWTService jwtService) {
-        return new TokenController(userAuthenticationService, jwtService);
+        return new TokenController(userAuthService, jwtService);
     }
 
     @Bean
@@ -64,9 +73,9 @@ public class AppConfig {
     }
 
     @Bean
-    public UserAuthenticationService getUserAuthenticationService(PasswordEncoder passwordEncoder,
-                                                                  JWTService jwtService, UserDetailsService userDetailsService) {
-        return new UserAuthenticationServiceImpl(passwordEncoder, jwtService, userDetailsService);
+    public UserAuthService getUserAuthenticationService(PasswordEncoder passwordEncoder,
+                                                        JWTService jwtService, UserDetailsService userDetailsService) {
+        return new UserAuthServiceImpl(passwordEncoder, jwtService, userDetailsService);
     }
 
     @Bean

@@ -170,7 +170,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDTO'
+              $ref: '#/components/schemas/UserRequestDTO'
       responses:
         '200':
           description: Operacion Exitosa, respuesta EmptyResponseDTO

@@ -1,7 +1,7 @@
-package com.SpringBootProject.app.service;
+package com.SpringBootProject.app.service.user;
 
 import java.util.Map;
 
-public interface UserAuthenticationService {
+public interface UserAuthService {
     Map<String, String> login(final String username, final String password);
 }

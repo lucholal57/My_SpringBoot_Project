@@ -1,4 +1,4 @@
-package com.SpringBootProject.app.service;
+package com.SpringBootProject.app.service.mapper;
 
 import com.SpringBootProject.app.entity.UserEntity;
 import com.SpringBootProject.app.model.UserDTO;

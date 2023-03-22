@@ -2,6 +2,8 @@ package com.SpringBootProject.app.service;
 
 import com.SpringBootProject.app.entity.UserEntity;
 import com.SpringBootProject.app.model.UserDTO;
+import com.SpringBootProject.app.service.mapper.UserMapper;
+import com.SpringBootProject.app.service.mapper.UserMapperImpl;
 import com.SpringBootProject.app.utils.DateUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
