@@ -165,19 +165,13 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody:
-        description: Eliminacion de usuario
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRequestDTO'
       responses:
         '200':
           description: Operacion Exitosa, respuesta EmptyResponseDTO
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EmptyResponseDTO'
+                $ref: '#/components/schemas/ResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -860,6 +854,14 @@ components:
         password:
           type: string
           example: 'MyS3cr3tP@ssword'
+        role:
+          type: string
+          description: The user role.
+          example: ROLE_USER
+          default: ROLE_USER
+          enum:
+            - ROLE_USER
+            - ROLE_ADMIN
         dateCreated:
           type: string
           #Format se usa para validar que lo que recibe sea del mismo tipo.
@@ -876,6 +878,7 @@ components:
         - lastName
         - email
         - password
+        - role
         - dateCreated
 
     #Creamos el modelo UserRequestDTO ya que lo vamos a usar para el POST de user, por que tanto el id como las fechas no son necesarias para la creacion del mismo
@@ -897,11 +900,20 @@ components:
         password:
           type: string
           example: 'MyS3cr3tP@ssword'
+        role:
+          type: string
+          description: The user role.
+          example: ROLE_USER
+          default: ROLE_USER
+          enum:
+            - ROLE_USER
+            - ROLE_ADMIN
       required:
         -  username
         - firstName
         - lastName
         - email
+        - role
         - password
 
     #Creamos un modelo para hacer una lista de usuario y poder responder a los GET ya que estos devuelven LISTAS si es que no espeficicamos y mandamos un ID para recibir uno en particular.

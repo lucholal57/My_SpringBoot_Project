@@ -79,16 +79,37 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     @Override
-    public UserDTO update(UserDTO theUser, Long id) throws RuntimeException {
+    public UserDTO update(UserDTO theUser) throws RuntimeException {
         LOGGER.trace("Busqueda de usuario por ID");
-        Optional<UserEntity> optionalUser = userRepository.findById(id);
-        UserEntity toUpdate = userMapper.mapUserEncoded(theUser);
-        UserEntity created = userRepository.save(toUpdate);
-        return userMapper.mapUser(created);
+        //Buscamos el usuario por el id que recibimos
+        Optional<UserEntity> optionalUser = userRepository.findById(theUser.getId());
+        /*
+        Validamos que en la variable optionalUser contenga el usuario si es que existe en nuestra
+        db de no existir lanzamos una exepcion
+         */
+        if(optionalUser.isEmpty()){
+            throw new RuntimeException("El usuario no existe");
+        }
+        // Guardamos el usuario que obtuvimos en la variable user de tipo UserEntity
+        UserEntity user = optionalUser.get();
+        //Utilizamos el Fill para setear en el userEntity el UserDTO
+        UserEntity userFilled =  userMapper.fill(theUser,user);
+        //Una vez seteado guardamos el usuario con el metodo save del repository de usuario
+        UserEntity userSaved = userRepository.save(userFilled);
+        //Y retornamos el usuario guardado pero usando el mapUser para pasar de Entity a DTO
+        return userMapper.mapUser(userSaved);
     }
 
     @Override
     public void delete(Long id) throws RuntimeException {
-
+        LOGGER.trace("Busqueda de usuario por ID para eliminar");
+        //Buscamos el usuario por el id que recibimos
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if(optionalUser.isEmpty()){
+            throw new RuntimeException("El usuario no existe");
+        }
+        // Guardamos el usuario que obtuvimos en la variable user de tipo UserEntity
+        UserEntity user = optionalUser.get();
+        userRepository.delete(user);
     }
 }

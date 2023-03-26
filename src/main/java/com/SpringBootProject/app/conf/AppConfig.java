@@ -8,10 +8,7 @@ import com.SpringBootProject.app.service.jwt.JWTService;
 import com.SpringBootProject.app.service.jwt.JWTServiceImpl;
 import com.SpringBootProject.app.service.mapper.UserMapper;
 import com.SpringBootProject.app.service.mapper.UserMapperImpl;
-import com.SpringBootProject.app.service.user.UserAuthService;
-import com.SpringBootProject.app.service.user.UserAuthServiceImpl;
-import com.SpringBootProject.app.service.user.UserAdminService;
-import com.SpringBootProject.app.service.user.UserAdminServiceImpl;
+import com.SpringBootProject.app.service.user.*;
 import com.SpringBootProject.app.utils.JwtTokenUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,13 +24,16 @@ public class AppConfig {
 
     /*
     Metodo para saltar el login de Swagger
-     */
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.httpBasic().disable();
         return http.build();
     }
+
+ */
 
     /*
     Creamos el Bean de UserController para poder acceder al Controller quien es el encargado de manejar
@@ -44,23 +44,24 @@ public class AppConfig {
     public UserController getUserController(UserAdminService userAdminService) {
         return new UserController(userAdminService);
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserMapper getUserMapper(PasswordEncoder encoder){
-        return new UserMapperImpl(encoder);
-    }
-
     @Primary
     @Bean
     public UserAdminService getUserService(UserMapper userMapper, UserRepository userRepository) {
         return new UserAdminServiceImpl(userMapper, userRepository);
     }
+    @Bean
+    public CartController getCartController(){
+        return new CartController();
+    }
+    @Bean
+    public UserMapper getUserMapper(PasswordEncoder encoder){
+        return new UserMapperImpl(encoder);
+    }
 
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     public TokenController getTokenController(UserAuthService userAuthService,
                                               JWTService jwtService) {
@@ -79,8 +80,10 @@ public class AppConfig {
     }
 
     @Bean
-    public CartController getCartController(){
-        return new CartController();
+    public UserDetailsService getUserDetailService(UserRepository userRepository) {
+        return new UserDetailServiceImpl(userRepository);
     }
+
+
 
 }

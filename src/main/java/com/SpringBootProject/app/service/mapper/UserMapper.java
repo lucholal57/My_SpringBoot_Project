@@ -20,4 +20,6 @@ public interface UserMapper {
     */
     UserDTO mapUser(final UserEntity theUser);
 
+    UserEntity fill (final UserDTO source, final UserEntity target);
+
 }

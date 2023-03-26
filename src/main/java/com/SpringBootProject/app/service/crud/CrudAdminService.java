@@ -19,7 +19,7 @@ public interface CrudAdminService<A,B,I> {
 
     A create(final B element) throws RuntimeException;
 
-    A update(final A element, final Long I) throws RuntimeException;
+    A update(final A element) throws RuntimeException;
 
     void delete(final I id) throws RuntimeException;
 }

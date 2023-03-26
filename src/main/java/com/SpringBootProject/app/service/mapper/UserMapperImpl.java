@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 
 public class UserMapperImpl implements UserMapper {
@@ -88,6 +89,24 @@ public class UserMapperImpl implements UserMapper {
         response.setDateCreated(new Date());
         return response;
     }
+
+    @Override
+    /*
+    Este metodo es para castear y poder actualizar en donde Source es lo que recibimos para actualizar
+    y target es el usuario de la base de dato al cual se vamos a cambiar los valores de sus atributos
+     */
+    public UserEntity fill(UserDTO source, UserEntity target) {
+        target.setUsername(source.getUsername());
+        if(source.getPassword() != null && source.getPassword() != ""){
+            target.setPassword(encoder.encode(source.getPassword()));
+        }
+        target.setFirstName(source.getFirstName());
+        target.setLastName(source.getLastName());
+        target.setEmail(source.getEmail());
+        return target;
+    }
+
+
 
 
 }

@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /*
 Esta clase user controler va a ser la encarcada de trabajar con las peticiones. Extiende de una clase BASE
@@ -67,6 +69,7 @@ public class UserController extends BaseController implements UsersApiDelegate {
     }
 
     public ResponseEntity<ResponseContainerDTO> getAllUser() {
+        Long start = System.currentTimeMillis();
         LOGGER.debug("LISTAR");
         ResponseContainerDTO responseContainer = new ResponseContainerDTO();
         try {
@@ -78,23 +81,51 @@ public class UserController extends BaseController implements UsersApiDelegate {
         } catch (Exception e) {
             LOGGER.error("Ocurrio un error al listar usuarios", e);
             LOGGER.error("An error occurred listing uses", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseContainer);
+            return buildErrorResponse(responseContainer, HttpStatus.NO_CONTENT, e, "A2", start);
 
         }
     }
 
-    public ResponseEntity<ResponseContainerDTO> updateUser(Long userId,
-                                                           UserDTO userDTO) {
+    public ResponseEntity<ResponseContainerDTO> updateUser(Long userId, UserDTO userDTO) {
         Long start = System.currentTimeMillis();
-        LOGGER.debug("ACTUALIZAR");
-        return null;
+        LOGGER.debug("UPDATE");
+        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
+        //Validamos que el id que estamos buscando sea el mismo al que vamos a actualizar desde swagger
+        if(!Objects.equals(userId, userDTO.getId())){
+            //Si son distintos lo inforamos en un LOG
+            LOGGER.error("El id que busca es distinto al usuario que quiere actualizar");
+            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,null,"A2",start);
+        }
+        //De ser igual realizamos un tryCatch
+        try{
+            // Creamos una respuesta de tipo UserDTO y le mandamos a la funcion update el modelo userDTO que estamos
+            //modificando
+            UserDTO response = userAdminService.update(userDTO);
+            responseContainer.data(response);
+            responseContainer.setMeta(buildMeta(start));
+            return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
+        }catch (Exception e){
+            LOGGER.error("Ocurrio un problema al actualizar usuario");
+            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,e,"A2",start);
+        }
     }
 
-
-    public ResponseEntity<EmptyResponseDTO> deleteUser(Long userId,
-                                                       UserDTO userDTO) {
+    public ResponseEntity<ResponseContainerDTO> deleteUser(Long userId) {
+        Long start = System.currentTimeMillis();
         LOGGER.debug("BORRAR");
         ResponseContainerDTO responseContainer = new ResponseContainerDTO();
-        return null;
+        try{
+            userAdminService.delete(userId);
+            EmptyResponseDTO response = new EmptyResponseDTO();
+            response.setDate(OffsetDateTime.now());
+            responseContainer.data(response);
+            responseContainer.setMeta(buildMeta(start));
+            return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
+        }catch (Exception e){
+            LOGGER.error("Ocurrio un error al eliminar usuario");
+            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,e,"A2",start);
+        }
     }
+
+
 }

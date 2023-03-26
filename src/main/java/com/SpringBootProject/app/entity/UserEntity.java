@@ -3,7 +3,6 @@ package com.SpringBootProject.app.entity;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -28,8 +27,9 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<RoleEntity> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private RoleEnum role;
     @Column(nullable = true)
     private Date dateCreated;
     @Column(nullable = true)
@@ -45,14 +45,14 @@ public class UserEntity {
      */
 
     public UserEntity(Long id, String username, String firstName, String lastName, String email,
-                      String password, Collection<RoleEntity> roles, Date dateCreated, Date dateDeleted) {
+                      String password, RoleEnum role, Date dateCreated, Date dateDeleted) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
         this.dateCreated = dateCreated;
         this.dateDeleted = dateDeleted;
     }
@@ -110,12 +110,12 @@ public class UserEntity {
         this.password = password;
     }
 
-    public Collection<RoleEntity> getRoles() {
-        return roles;
+    public RoleEnum getRole() {
+        return role;
     }
 
-    public void setRoles(Collection<RoleEntity> roles) {
-        this.roles = roles;
+    public void setRole(RoleEnum role) {
+        this.role = role;
     }
 
     public Date getDateCreated() {
