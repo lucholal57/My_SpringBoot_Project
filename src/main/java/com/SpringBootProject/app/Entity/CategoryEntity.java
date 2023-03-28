@@ -14,11 +14,13 @@ public class CategoryEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
+    /* La idea es sacar este codigo para crear una categoria normal y poder agregar productos a ciertas categorias.
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private CategoryEntity parent;
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     private Set<CategoryEntity> children;
+    */
     @Column(nullable = false)
     private Date date_created;
     @Column(nullable = true)
@@ -30,12 +32,12 @@ public class CategoryEntity {
     public CategoryEntity() {
     }
 
-    public CategoryEntity(Long id, String name, CategoryEntity parent, Date date_created, Date date_deleted) {
+    public CategoryEntity(Long id, String name, Date date_created, Date date_deleted, List<ProductEntity> products) {
         this.id = id;
         this.name = name;
-        this.parent = parent;
         this.date_created = date_created;
         this.date_deleted = date_deleted;
+        this.products = products;
     }
 
     public Long getId() {
@@ -52,22 +54,6 @@ public class CategoryEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public CategoryEntity getParent() {
-        return parent;
-    }
-
-    public void setParent(CategoryEntity parent) {
-        this.parent = parent;
-    }
-
-    public Set<CategoryEntity> getChildren() {
-        return children;
-    }
-
-    public void setChildren(Set<CategoryEntity> children) {
-        this.children = children;
     }
 
     public List<ProductEntity> getProducts() {
@@ -99,7 +85,6 @@ public class CategoryEntity {
         return "CategoryEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", parent=" + parent +
                 ", date_created=" + date_created +
                 ", date_deleted=" + date_deleted +
                 '}';

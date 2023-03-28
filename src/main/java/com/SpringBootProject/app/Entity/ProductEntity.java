@@ -21,7 +21,7 @@ public class ProductEntity {
     EAGER si trae los datos de la categoria asociada.
      */
     @ManyToOne
-    @JoinColumn(name = "category")
+    @JoinColumn(name = "category_id")
     private CategoryEntity category;
     /*
     La clase Big Decimal sirve para trabajar con monedas. Tiene mas precision que un Double.

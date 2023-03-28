@@ -1002,7 +1002,7 @@ components:
           example: 2
           description: the stock quantity.
         category:
-          $ref: '#/components/schemas/CategoryDTO'
+          $ref: '#/components/schemas/CategoryRequestDTO'
       required:
         - name
         - price
@@ -1028,10 +1028,10 @@ components:
         name:
           type: string
           example: "Category Name"
-        parent:
-          type: integer
-          format: int64
-          example: 1
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDTO'
         dateCreated:
           type: string
           format: date
@@ -1047,10 +1047,6 @@ components:
         name:
           type: string
           example: James
-        parent:
-          type: integer
-          format: int64
-          example: 1
       required:
         - name
 
@@ -1179,6 +1175,7 @@ components:
       oneOf:
         - $ref: '#/components/schemas/JWTResponseDTO'
         - $ref: '#/components/schemas/ProductDTO'
+        - $ref: '#/components/schemas/CategoryDTO'
         - $ref: '#/components/schemas/UserListDTO'
         - $ref: '#/components/schemas/UserDTO'
         - $ref: '#/components/schemas/CartDTO'

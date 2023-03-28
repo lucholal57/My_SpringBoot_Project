@@ -1,6 +1,9 @@
 package com.SpringBootProject.app.Service.MapperProduct;
 
+import com.SpringBootProject.app.Entity.CategoryEntity;
 import com.SpringBootProject.app.Entity.ProductEntity;
+import com.SpringBootProject.app.Repository.CategoryRepository;
+import com.SpringBootProject.app.Service.Category.CategoryAdminServiceImpl;
 import com.SpringBootProject.app.Service.MapperCategory.CategoryMapper;
 import com.SpringBootProject.app.Utils.DateUtils;
 import com.SpringBootProject.app.model.ProductDTO;
@@ -11,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Optional;
 
 public class ProductMapperImpl implements  ProductMapper{
     /*
@@ -18,9 +22,12 @@ public class ProductMapperImpl implements  ProductMapper{
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductMapperImpl.class);
     private CategoryMapper categoryMapper;
+    private CategoryRepository categoryRepository;
 
-    public ProductMapperImpl(CategoryMapper categoryMapper) {
-        this.categoryMapper = categoryMapper;
+
+    public ProductMapperImpl(CategoryMapper theCategoryMapper, CategoryRepository theCategoryRepository) {
+        this.categoryMapper = theCategoryMapper;
+        this.categoryRepository = theCategoryRepository;
     }
 
     @Override
@@ -30,8 +37,11 @@ public class ProductMapperImpl implements  ProductMapper{
         response.setName(theProduct.getName());
         response.setPrice(BigDecimal.valueOf(theProduct.getPrice()));
         response.setQty(theProduct.getQty());
-        response.setDescription(theProduct.getName());
-        response.setCategory(categoryMapper.mapCategory(theProduct.getCategory()));
+        response.setDescription(theProduct.getDescription());
+        CategoryEntity category = categoryRepository.findByName(theProduct.getCategory().getName())
+                .orElseGet(() -> categoryRepository.save(categoryMapper.mapCategory(theProduct.getCategory())));
+        response.setCategory(category);
+
         response.setDateCreated(new Date());
         return response;
     }

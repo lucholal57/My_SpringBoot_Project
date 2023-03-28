@@ -73,8 +73,8 @@ public class AppConfig {
                 productMapper);
     }
     @Bean
-    public ProductMapper getProductMapper(CategoryMapper categoryMapper){
-        return new ProductMapperImpl(categoryMapper);
+    public ProductMapper getProductMapper(CategoryMapper categoryMapper, CategoryRepository categoryRepository){
+        return new ProductMapperImpl(categoryMapper,categoryRepository);
     }
 
     //Beans de Category

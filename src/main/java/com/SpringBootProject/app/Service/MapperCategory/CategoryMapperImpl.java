@@ -25,7 +25,9 @@ public class CategoryMapperImpl implements CategoryMapper {
         LOGGER.trace(String.format("Mapeo de CategoryEntity a DTO : %s", theCategory.toString()));
         CategoryEntity response = new CategoryEntity();
         response.setName(theCategory.getName());
+        /*
         Long parentCategoryId = theCategory.getParent();
+
         if(parentCategoryId !=null && parentCategoryId > 0){
             Optional<CategoryEntity> opParent = categoryRepository.findById(parentCategoryId);
             if(opParent.isEmpty()){
@@ -35,6 +37,7 @@ public class CategoryMapperImpl implements CategoryMapper {
             CategoryEntity parent = opParent.get();
             response.setParent(parent);
         }
+        */
         response.setDate_created(new Date());
         return response;
     }
@@ -46,6 +49,7 @@ public class CategoryMapperImpl implements CategoryMapper {
         CategoryEntity response = new CategoryEntity();
         response.setId(theCategory.getId());
         response.setName(theCategory.getName());
+        /*
         Long parentCategoryId = theCategory.getParent();
         if(parentCategoryId !=null && parentCategoryId > 0){
             Optional<CategoryEntity> opParent = categoryRepository.findById(parentCategoryId);
@@ -56,6 +60,7 @@ public class CategoryMapperImpl implements CategoryMapper {
             CategoryEntity parent = opParent.get();
             response.setParent(parent);
         }
+        */
         if(theCategory.getDateCreated() != null){
             response.setDate_created(DateUtils.toDate(theCategory.getDateCreated()));
         }
@@ -71,9 +76,11 @@ public class CategoryMapperImpl implements CategoryMapper {
         CategoryDTO response = new CategoryDTO();
         response.setId(theCategory.getId());
         response.setName(theCategory.getName());
+        /*
         if (theCategory.getParent() != null) {
             response.setParent(theCategory.getParent().getId());
         }
+        */
         if (theCategory.getDate_created() != null) {
             LocalDate createdLocalDate = DateUtils.toLocalDate(theCategory.getDate_created());
             response.setDateCreated(createdLocalDate);
