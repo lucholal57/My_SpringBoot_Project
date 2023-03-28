@@ -2,7 +2,7 @@ package com.SpringBootProject.app.controller;
 
 import com.SpringBootProject.app.api.UsersApiDelegate;
 import com.SpringBootProject.app.model.*;
-import com.SpringBootProject.app.service.user.UserAdminService;
+import com.SpringBootProject.app.Service.User.UserAdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
@@ -33,17 +33,17 @@ public class UserController extends BaseController implements UsersApiDelegate {
 
     }
 
-    public ResponseEntity<ResponseContainerDTO> createUser(UserRequestDTO userDTO) {
+    public ResponseEntity<ResponseContainerDTO> createUser(UserRequestDTO userRequestDTO) {
         Long start = System.currentTimeMillis();
         LOGGER.debug("CREAR");
         ResponseContainerDTO responseContainer = new ResponseContainerDTO();
         try {
-            UserDTO response = userAdminService.create(userDTO);
+            UserDTO response = userAdminService.create(userRequestDTO);
             responseContainer.data(response);
             responseContainer.setMeta(buildMeta(start));
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
         } catch (Exception e) {
-            LOGGER.error(String.format("An error occurred creating a user: \"%s\" ", userDTO), e);
+            LOGGER.error(String.format("Ocurrio un error al crear el usuario: \"%s\" ", userRequestDTO), e);
             return buildErrorResponse(responseContainer, HttpStatus.BAD_REQUEST, e, "A1", start);
         }
     }

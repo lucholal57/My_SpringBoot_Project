@@ -1,6 +1,5 @@
 package com.SpringBootProject.app;
 
-import com.SpringBootProject.app.conf.AppConfig;
 import org.openapitools.configuration.SpringDocConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
