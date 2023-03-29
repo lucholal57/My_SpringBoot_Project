@@ -70,7 +70,7 @@ public class UserController extends BaseController implements UsersApiDelegate {
 
     public ResponseEntity<ResponseContainerDTO> getAllUser() {
         Long start = System.currentTimeMillis();
-        LOGGER.debug("LISTAR");
+        LOGGER.debug("LISTAR USUARIO");
         ResponseContainerDTO responseContainer = new ResponseContainerDTO();
         try {
             List<UserDTO> listUser = userAdminService.getAll();
@@ -80,7 +80,6 @@ public class UserController extends BaseController implements UsersApiDelegate {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
         } catch (Exception e) {
             LOGGER.error("Ocurrio un error al listar usuarios", e);
-            LOGGER.error("An error occurred listing uses", e);
             return buildErrorResponse(responseContainer, HttpStatus.NO_CONTENT, e, "A2", start);
 
         }

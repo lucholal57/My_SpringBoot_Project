@@ -42,8 +42,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     @Override
     public List<CategoryDTO> getAll() throws RuntimeException {
         LOGGER.trace(String.format("Listado de Categorias"));
-        Iterable<CategoryEntity> products = categoryRepository.findAll();
-        Iterator<CategoryEntity> iter = products.iterator();
+        Iterable<CategoryEntity> categories = categoryRepository.findAll();
+        Iterator<CategoryEntity> iter = categories.iterator();
         List<CategoryDTO> response = new ArrayList<>();
         while (iter.hasNext()){
             response.add(categoryMapper.mapCategory(iter.next()));

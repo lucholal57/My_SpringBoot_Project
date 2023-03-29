@@ -8,6 +8,8 @@ import com.SpringBootProject.app.model.ProductRequestDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ProductAdminServiceImpl implements ProductAdminService {
@@ -35,7 +37,14 @@ public class ProductAdminServiceImpl implements ProductAdminService {
     }
     @Override
     public List<ProductDTO> getAll() throws RuntimeException {
-        return null;
+        LOGGER.trace("Lista de productos");
+        Iterable<ProductEntity> products = productRepository.findAll();
+        Iterator<ProductEntity> iter = products.iterator();
+        List<ProductDTO> respose = new ArrayList<>();
+        while (iter.hasNext()){
+            respose.add(productMapper.mapProduct(iter.next()));
+        }
+        return respose;
     }
     @Override
     public ProductDTO update(ProductDTO element) throws RuntimeException {

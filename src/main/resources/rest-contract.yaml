@@ -1019,7 +1019,6 @@ components:
 
     CategoryDTO:
       type: object
-      title: CategoryDTO
       properties:
         id:
           type: integer
@@ -1028,10 +1027,6 @@ components:
         name:
           type: string
           example: "Category Name"
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductDTO'
         dateCreated:
           type: string
           format: date
@@ -1040,6 +1035,10 @@ components:
           type: string
           format: date
           example: '2023-03-12'
+        # Indica a Swagger que oculte el campo "type" en la documentación
+      x-swagger-ui:
+        apiModelProperty:
+          hidden: true
 
     CategoryRequestDTO:
       type: object
@@ -1051,9 +1050,12 @@ components:
         - name
 
     CategoryListDTO:
-      type: array
-      items:
-        $ref: '#/components/schemas/CategoryDTO'
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDTO'
 
     CartDTO:
       type: object
@@ -1176,6 +1178,7 @@ components:
         - $ref: '#/components/schemas/JWTResponseDTO'
         - $ref: '#/components/schemas/ProductDTO'
         - $ref: '#/components/schemas/CategoryDTO'
+        - $ref: '#/components/schemas/CategoryListDTO'
         - $ref: '#/components/schemas/UserListDTO'
         - $ref: '#/components/schemas/UserDTO'
         - $ref: '#/components/schemas/CartDTO'
