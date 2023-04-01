@@ -1,6 +1,7 @@
 package com.SpringBootProject.app.Service.Category;
 
 import com.SpringBootProject.app.Entity.CategoryEntity;
+import com.SpringBootProject.app.Entity.UserEntity;
 import com.SpringBootProject.app.Repository.CategoryRepository;
 import com.SpringBootProject.app.Service.Crud.CrudAdminService;
 import com.SpringBootProject.app.Service.MapperCategory.CategoryMapper;
@@ -11,9 +12,7 @@ import com.SpringBootProject.app.model.UserRequestDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class CategoryAdminServiceImpl implements CategoryAdminService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryAdminServiceImpl.class);
@@ -33,7 +32,10 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     }
     @Override
     public CategoryDTO get(Long id) throws RuntimeException {
-        return null;
+        LOGGER.trace("Busqueda de categoria por ID");
+        Optional<CategoryEntity> optionalCategory = categoryRepository.findById(id);
+        CategoryEntity category = optionalCategory.orElseThrow(NoSuchElementException::new);
+        return categoryMapper.mapCategory(category);
     }
 
     /*
@@ -51,8 +53,25 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
         return response;
     }
     @Override
-    public CategoryDTO update(CategoryDTO element) throws RuntimeException {
-        return null;
+    public CategoryDTO update(CategoryDTO theCategory) throws RuntimeException {
+        LOGGER.trace("Busqueda de categoria por ID");
+        //Buscamos el usuario por el id que recibimos
+        Optional<CategoryEntity> optionalCategory = categoryRepository.findById(theCategory.getId());
+        /*
+        Validamos que en la variable optionalCategory contenga la categoria si es que existe en nuestra
+        db de no existir lanzamos una excepcion
+         */
+        if(optionalCategory.isEmpty()){
+            throw new RuntimeException("La Categoria no existe");
+        }
+        // Guardamos el usuario que obtuvimos en la variable user de tipo UserEntity
+        CategoryEntity category = optionalCategory.get();
+        //Utilizamos el Fill para setear en el userEntity el UserDTO
+        CategoryEntity categoryFilled =  categoryMapper.fill(theCategory,category);
+        //Una vez seteado guardamos el usuario con el metodo save del repository de usuario
+        CategoryEntity categorySaved = categoryRepository.save(categoryFilled);
+        //Y retornamos el usuario guardado pero usando el mapUser para pasar de Entity a DTO
+        return categoryMapper.mapCategory(categorySaved);
     }
 
     @Override

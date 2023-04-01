@@ -104,7 +104,7 @@ public class UserController extends BaseController implements UsersApiDelegate {
             responseContainer.setMeta(buildMeta(start));
             return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
         }catch (Exception e){
-            LOGGER.error("Ocurrio un problema al actualizar usuario");
+            LOGGER.error("Ocurrio un error al actualizar usuario");
             return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,e,"A2",start);
         }
     }

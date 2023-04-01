@@ -17,4 +17,8 @@ public interface CategoryMapper {
     Metodo para mapear de DTO a entity
      */
     CategoryDTO mapCategory(final CategoryEntity theCategory);
+    /*
+    Metodo para actualizar y castear datos de DTO a Entity
+     */
+    CategoryEntity fill(CategoryDTO source, CategoryEntity target);
 }

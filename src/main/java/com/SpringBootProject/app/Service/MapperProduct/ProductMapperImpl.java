@@ -2,12 +2,15 @@ package com.SpringBootProject.app.Service.MapperProduct;
 
 import com.SpringBootProject.app.Entity.CategoryEntity;
 import com.SpringBootProject.app.Entity.ProductEntity;
+import com.SpringBootProject.app.Entity.UserEntity;
 import com.SpringBootProject.app.Repository.CategoryRepository;
+import com.SpringBootProject.app.Service.Category.CategoryAdminService;
 import com.SpringBootProject.app.Service.Category.CategoryAdminServiceImpl;
 import com.SpringBootProject.app.Service.MapperCategory.CategoryMapper;
 import com.SpringBootProject.app.Utils.DateUtils;
 import com.SpringBootProject.app.model.ProductDTO;
 import com.SpringBootProject.app.model.ProductRequestDTO;
+import com.SpringBootProject.app.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +26,6 @@ public class ProductMapperImpl implements  ProductMapper{
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductMapperImpl.class);
     private CategoryMapper categoryMapper;
     private CategoryRepository categoryRepository;
-
 
     public ProductMapperImpl(CategoryMapper theCategoryMapper, CategoryRepository theCategoryRepository) {
         this.categoryMapper = theCategoryMapper;
@@ -53,7 +55,7 @@ public class ProductMapperImpl implements  ProductMapper{
         ProductEntity response = new ProductEntity();
         response.setId(theProduct.getId());
         response.setName(theProduct.getName());
-        //response.setPrice(BigDecimal.valueOf(theProduct.getPrice()));
+        response.setPrice(BigDecimal.valueOf(theProduct.getPrice()));
         response.setQty(theProduct.getQty());
         response.setDescription(theProduct.getName());
         response.setCategory(categoryMapper.mapCategory(theProduct.getCategory()));
@@ -86,5 +88,14 @@ public class ProductMapperImpl implements  ProductMapper{
         }
 
         return response;
+    }
+
+    public ProductEntity fill (final ProductDTO source, final ProductEntity target){
+        target.setName(source.getName());
+        target.setDescription(source.getDescription());
+        target.setPrice(BigDecimal.valueOf(source.getPrice()));
+        target.setQty(source.getQty());
+        target.setCategory(categoryMapper.fill(source.getCategory(),target.getCategory()));
+        return target;
     }
 }

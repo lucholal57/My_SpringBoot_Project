@@ -1,10 +1,12 @@
 package com.SpringBootProject.app.Service.MapperCategory;
 
 import com.SpringBootProject.app.Entity.CategoryEntity;
+import com.SpringBootProject.app.Entity.UserEntity;
 import com.SpringBootProject.app.Repository.CategoryRepository;
 import com.SpringBootProject.app.Utils.DateUtils;
 import com.SpringBootProject.app.model.CategoryDTO;
 import com.SpringBootProject.app.model.CategoryRequestDTO;
+import com.SpringBootProject.app.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,5 +93,9 @@ public class CategoryMapperImpl implements CategoryMapper {
         }
 
         return response;
+    }
+    public CategoryEntity fill(CategoryDTO source, CategoryEntity target) {
+        target.setName(source.getName());
+        return target;
     }
 }
