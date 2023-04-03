@@ -17,7 +17,7 @@ Esta clase user controler va a ser la encarcada de trabajar con las peticiones. 
 que contiene los responses generados para no tener que estar copiando lineas de codigo iguales.
 A su vez implementa UsersApiDelegate seria el path quien contiene la ejecuccion de los verbos del contrato
  */
-public class UserController extends BaseController implements UsersApiDelegate {
+public class UserController implements UsersApiDelegate {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -33,97 +33,107 @@ public class UserController extends BaseController implements UsersApiDelegate {
 
     }
 
-    public ResponseEntity<ResponseContainerDTO> createUser(UserRequestDTO userRequestDTO) {
-        Long start = System.currentTimeMillis();
+
+    public ResponseEntity<UserResponseContainerDTO> createUser(UserRequestDTO userRequestDTO) {
         LOGGER.debug("CREAR");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
+        UserResponseContainerDTO responseContainer = new UserResponseContainerDTO();
         try {
             UserDTO response = userAdminService.create(userRequestDTO);
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
+            responseContainer.user(response);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
         } catch (Exception e) {
             LOGGER.error(String.format("Ocurrio un error al crear el usuario: \"%s\" ", userRequestDTO), e);
-            return buildErrorResponse(responseContainer, HttpStatus.BAD_REQUEST, e, "A1", start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
 
-    /*
-    Busqueda de usuario por ID
-     */
-    public ResponseEntity<ResponseContainerDTO> getUser(Long userId) {
-        Long start = System.currentTimeMillis();
+    //Busqueda de usuario por ID
+    public ResponseEntity<UserResponseContainerDTO> getUser(Long userId) {
         LOGGER.trace("BUSQUEDA POR ID");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
+        UserResponseContainerDTO responseContainer = new UserResponseContainerDTO();
         try {
             UserDTO response = userAdminService.get(userId);
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
+            responseContainer.user(response);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
         } catch (Exception e) {
             LOGGER.error("Ocurrio un error al buscar usuario", e);
-            return buildErrorResponse(responseContainer, HttpStatus.NO_CONTENT, e, "A2", start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
-
-
+    }
+    @Override
+    public ResponseEntity<EmptyResponseDTO> removeRoleToUser(Long userId, Long roleId) {
+        return UsersApiDelegate.super.removeRoleToUser(userId, roleId);
     }
 
-    public ResponseEntity<ResponseContainerDTO> getAllUser() {
-        Long start = System.currentTimeMillis();
+    public ResponseEntity<UserListResponseContainerDTO> getAllUser() {
         LOGGER.debug("LISTAR USUARIO");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
+        UserListResponseContainerDTO responseContainer = new UserListResponseContainerDTO();
         try {
             List<UserDTO> listUser = userAdminService.getAll();
-            UserListDTO response = new UserListDTO();
-            response.setItems(listUser);
-            responseContainer.data(response);
+            responseContainer.users(listUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
         } catch (Exception e) {
             LOGGER.error("Ocurrio un error al listar usuarios", e);
-            return buildErrorResponse(responseContainer, HttpStatus.NO_CONTENT, e, "A2", start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
 
         }
     }
 
-    public ResponseEntity<ResponseContainerDTO> updateUser(Long userId, UserDTO userDTO) {
-        Long start = System.currentTimeMillis();
+    public ResponseEntity<UserResponseContainerDTO> updateUser(Long userId, UserDTO userDTO) {
         LOGGER.debug("UPDATE");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
+        UserResponseContainerDTO responseContainer = new UserResponseContainerDTO();
         //Validamos que el id que estamos buscando sea el mismo al que vamos a actualizar desde swagger
         if(!Objects.equals(userId, userDTO.getId())){
             //Si son distintos lo inforamos en un LOG
             LOGGER.error("El id que busca es distinto al usuario que quiere actualizar");
-            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,null,"A2",start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
         //De ser igual realizamos un tryCatch
         try{
             // Creamos una respuesta de tipo UserDTO y le mandamos a la funcion update el modelo userDTO que estamos
             //modificando
             UserDTO response = userAdminService.update(userDTO);
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
+            responseContainer.user(response);
             return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
         }catch (Exception e){
             LOGGER.error("Ocurrio un error al actualizar usuario");
-            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,e,"A2",start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
 
-    public ResponseEntity<ResponseContainerDTO> deleteUser(Long userId) {
-        Long start = System.currentTimeMillis();
+    public ResponseEntity<EmptyResponseDTO> deleteUser(Long userId) {
         LOGGER.debug("BORRAR");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
+        EmptyResponseDTO responseContainer = new EmptyResponseDTO();
         try{
             userAdminService.delete(userId);
             EmptyResponseDTO response = new EmptyResponseDTO();
             response.setDate(OffsetDateTime.now());
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
             return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
         }catch (Exception e){
             LOGGER.error("Ocurrio un error al eliminar usuario");
-            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,e,"A2",start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
+    }
+
+
+    @Override
+    public ResponseEntity<EmptyResponseDTO> addRoleToUser(Long userId, Long roleId) {
+        return UsersApiDelegate.super.addRoleToUser(userId, roleId);
+    }
+
+    @Override
+    public ResponseEntity<UserRoleResponseContainerDTO> createRole(UserRoleRequestDTO userRoleRequestDTO) {
+        return UsersApiDelegate.super.createRole(userRoleRequestDTO);
+    }
+
+    @Override
+    public ResponseEntity<UserRoleListResponseContainerDTO> getAllRoles() {
+        return UsersApiDelegate.super.getAllRoles();
+    }
+
+    @Override
+    public ResponseEntity<UserRoleResponseContainerDTO> getUserRoles(Long userId) {
+        return UsersApiDelegate.super.getUserRoles(userId);
     }
 
 

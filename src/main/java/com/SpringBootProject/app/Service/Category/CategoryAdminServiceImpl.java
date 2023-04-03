@@ -76,6 +76,14 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     public void delete(Long id) throws RuntimeException {
-
+        LOGGER.trace("Busqueda de categoria por ID para eliminar");
+        //Buscamos el usuario por el id que recibimos
+        Optional<CategoryEntity> optionalCategory = categoryRepository.findById(id);
+        if(optionalCategory.isEmpty()){
+            throw new RuntimeException("La Categoria no existe");
+        }
+        // Guardamos el usuario que obtuvimos en la variable user de tipo UserEntity
+        CategoryEntity category = optionalCategory.get();
+        categoryRepository.delete(category);
     }
 }

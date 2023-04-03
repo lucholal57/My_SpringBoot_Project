@@ -66,7 +66,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/UserResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -87,7 +87,7 @@ paths:
             application/json:
               #En el schema del response utilizamos el UserListDTO modelo de schema que generamos en los       component.
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/UserListResponseContainerDTO'
 
   /users/user/{userId}:
     #Get para obtener un usuario en particular pasando el id
@@ -113,7 +113,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/UserResponseContainerDTO'
 
     #Put para la edicion de un usuario pasando id
     put:
@@ -144,7 +144,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/UserResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -171,7 +171,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/EmptyResponseDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -197,7 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/UserRoleResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
     get:
@@ -214,7 +214,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/UserRoleListResponseContainerDTO'
 
 
   /users/user/{userId}/roles:
@@ -240,7 +240,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/UserRoleResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -274,7 +274,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/EmptyResponseDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -333,7 +333,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/ProductResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -352,7 +352,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/ProductListResponseContainerDTO'
 
   #Path para actualizar, eliminar y buscar un producto por id
   /products/product/{productId}:
@@ -384,7 +384,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/ProductResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -438,7 +438,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/ProductResponseContainerDTO'
 
   #Path para las categorias
   /products/category:
@@ -462,7 +462,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/CategoryResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -481,7 +481,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/CategoryListResponseContainerDTO'
 
 
     #Actualizacion, eliminacion, y busqueda de cateogoria por id
@@ -514,7 +514,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/CategoryResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -568,196 +568,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/CategoryResponseContainerDTO'
 
-  #path de Carrito
-  /carts/cart:
-    #Creacion de carrito
-    post:
-      tags:
-        - store
-      security:
-        - bearerAuth: []
-      summary: Crear carrito
-      description: EndPoint para crear carrito
-      operationId: createCart
-      requestBody:
-        description: Crear objeto carrito
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CartDTO'
-      responses:
-        '200':
-          description: operacion exitosa, respuesta de CartDTO
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
 
-    #Eliminar carrito
-  /carts/cart/{cartId}:
-    delete:
-      tags:
-        - store
-      security:
-        - bearerAuth: []
-      summary: Eliminar carrito
-      description: EndPoint para eliminar carrito
-      operationId: deleteCart
-      parameters:
-        - name: cartId
-          in: path
-          description: id de carrito
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: operacion exitosa, respuesta de EmptyResponseDTO
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyResponseDTO'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-    #Busqueda de carrito por id
-    get:
-      tags:
-        - store
-      security:
-        - bearerAuth: []
-      summary: Get Carrito
-      description: EndPoint para la busqueda de carrito por id
-      operationId: getCart
-      parameters:
-        - name: cartId
-          in: path
-          description: id de carrito
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: operacion exitosa, respuesta de CartDTO
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
-
-    #Path de eliminacion de carrito al hacer la compra el mismo se elimina
-  /carts/cart/{cartId}/buy:
-    #Eliminar carrito por id
-    delete:
-      tags:
-        - store
-      security:
-        - bearerAuth: []
-      summary: Comprar carrito
-      description: EndPoint para comprar carrito
-      operationId: buyCart
-      parameters:
-        - name: cartId
-          in: path
-          description: id de carrito
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: operacion exitosa, respuesta de OrderDTO
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyResponseDTO'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-    #Path para agregar productos al carrito por id de carrito
-  /carts/cart/{cartId}/items:
-    put:
-      tags:
-        - store
-      security:
-        - bearerAuth: []
-      summary: agregar productos al carrito
-      description: EndPoint para agregar productos al carrito
-      operationId: addToCart
-      parameters:
-        - name: cartId
-          in: path
-          description: id de carrito
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: agregar producto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductCartDTO'
-      responses:
-        '200':
-          description: successful operation response a CartDTO as data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-    #Eliminar productos del carrito
-    delete:
-      tags:
-        - store
-      security:
-        - bearerAuth: []
-      summary: Eliminar productos del carrito
-      description: EndPoint para eliminar productos del carrito
-      operationId: deleteFromCart
-      parameters:
-        - name: cartId
-          in: path
-          description: id del carrito
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: operacion exitosa, respuesta de EmptyResponseDTO
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyResponseDTO'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-    #Obtener producto del carrito
-    get:
-      tags:
-        - store
-      security:
-        - bearerAuth: []
-      summary: Obtener producto dentro del carrito
-      description: EndPoint para obtener producto dentro del carrito
-      operationId: getProductsInCart
-      parameters:
-        - name: cartId
-          in: path
-          description: id del carrito
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: operacion exitosa, respuesta de ProductCartListDTO
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
 
 
   /token/refresh:
@@ -789,7 +602,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/JWTResponseDTO'
 
   /token/login:
     post:
@@ -825,7 +638,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseContainerDTO'
+                $ref: '#/components/schemas/JWTResponseDTO'
 
 
 #Componentes para definir los schemas y referenciarlos.
@@ -1019,6 +832,7 @@ components:
 
     CategoryDTO:
       type: object
+      title: categoryDTO
       properties:
         id:
           type: integer
@@ -1027,6 +841,10 @@ components:
         name:
           type: string
           example: "Category Name"
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDTO'
         dateCreated:
           type: string
           format: date
@@ -1035,10 +853,6 @@ components:
           type: string
           format: date
           example: '2023-03-12'
-        # Indica a Swagger que oculte el campo "type" en la documentación
-      x-swagger-ui:
-        apiModelProperty:
-          hidden: true
 
     CategoryRequestDTO:
       type: object
@@ -1146,65 +960,65 @@ components:
           format: date-time
           example: '2023-02-01'
 
-    ErrorResponseDTO:
-      type: array
-      items:
-        $ref: '#/components/schemas/ErrorItemDTO'
 
-    ErrorItemDTO:
+
+    UserListResponseContainerDTO:
       type: object
       properties:
-        code:
-          type: string
-        link:
-          type: string
-        detail:
-          type: string
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserDTO"
 
-    MetaInformationResponseDTO:
-      required:
-        - time
+    UserResponseContainerDTO:
       type: object
       properties:
-        time:
-          type: integer
-          format: int64
-        refNumber:
-          type: string
+        user:
+          $ref: "#/components/schemas/UserDTO"
 
-    DataResponseDTO:
-      type: object
-      oneOf:
-        - $ref: '#/components/schemas/JWTResponseDTO'
-        - $ref: '#/components/schemas/ProductDTO'
-        - $ref: '#/components/schemas/CategoryDTO'
-        - $ref: '#/components/schemas/CategoryListDTO'
-        - $ref: '#/components/schemas/UserListDTO'
-        - $ref: '#/components/schemas/UserDTO'
-        - $ref: '#/components/schemas/CartDTO'
-        - $ref: '#/components/schemas/ProductListDTO'
-        - $ref: '#/components/schemas/UserRoleDTO'
-        - $ref: '#/components/schemas/UserRoleListDTO'
-        - $ref: '#/components/schemas/EmptyResponseDTO'
-      properties:
-        type:
-          type: string
-          description: The type of the contained object
-      discriminator:
-        propertyName: type
-
-    ResponseContainerDTO:
-      required:
-        - meta
-        - type
+    UserRoleListResponseContainerDTO:
       type: object
       properties:
-        errors:
-          $ref: '#/components/schemas/ErrorResponseDTO'
-        meta:
-          $ref: '#/components/schemas/MetaInformationResponseDTO'
-        data:
-          $ref: '#/components/schemas/DataResponseDTO'
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserRoleDTO"
+
+    UserRoleResponseContainerDTO:
+      type: object
+      properties:
+        role:
+          $ref: "#/components/schemas/UserRoleDTO"
+
+    ProductListResponseContainerDTO:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductDTO"
+
+    ProductResponseContainerDTO:
+      type: object
+      properties:
+        product:
+            $ref: "#/components/schemas/ProductDTO"
+
+    CategoryListResponseContainerDTO:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/CategoryDTO"
+
+    CategoryResponseContainerDTO:
+      type: object
+      properties:
+        category:
+          $ref: "#/components/schemas/CategoryDTO"
+
+
 
   responses:
     UnauthorizedError:

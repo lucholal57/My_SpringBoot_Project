@@ -10,7 +10,6 @@ import com.SpringBootProject.app.Service.MapperProduct.ProductMapper;
 import com.SpringBootProject.app.Service.MapperProduct.ProductMapperImpl;
 import com.SpringBootProject.app.Service.Product.ProductAdminService;
 import com.SpringBootProject.app.Service.Product.ProductAdminServiceImpl;
-import com.SpringBootProject.app.controller.CartController;
 import com.SpringBootProject.app.controller.ProductController;
 import com.SpringBootProject.app.controller.TokenController;
 import com.SpringBootProject.app.controller.UserController;
@@ -89,10 +88,6 @@ public class AppConfig {
     }
 
 
-    @Bean
-    public CartController getCartController(){
-        return new CartController();
-    }
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

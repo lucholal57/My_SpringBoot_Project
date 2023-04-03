@@ -1,18 +1,15 @@
 package com.SpringBootProject.app.Service.MapperCategory;
 
 import com.SpringBootProject.app.Entity.CategoryEntity;
-import com.SpringBootProject.app.Entity.UserEntity;
 import com.SpringBootProject.app.Repository.CategoryRepository;
 import com.SpringBootProject.app.Utils.DateUtils;
 import com.SpringBootProject.app.model.CategoryDTO;
 import com.SpringBootProject.app.model.CategoryRequestDTO;
-import com.SpringBootProject.app.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Optional;
 
 public class CategoryMapperImpl implements CategoryMapper {
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryMapperImpl.class);

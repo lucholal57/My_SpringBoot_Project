@@ -2,6 +2,8 @@ package com.SpringBootProject.app.controller;
 
 import com.SpringBootProject.app.Service.Category.CategoryAdminService;
 import com.SpringBootProject.app.Service.Product.ProductAdminService;
+
+
 import com.SpringBootProject.app.api.ProductsApiDelegate;
 import com.SpringBootProject.app.model.*;
 import org.slf4j.Logger;
@@ -9,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class ProductController extends BaseController implements ProductsApiDelegate {
+public class ProductController implements ProductsApiDelegate {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
     private ProductAdminService productAdminService;
@@ -24,147 +27,159 @@ public class ProductController extends BaseController implements ProductsApiDele
         this.categoryAdminService = categoryAdminService;
     }
 
-    public ResponseEntity<ResponseContainerDTO> createProduct(ProductRequestDTO productRequestDTO) {
-        Long start = System.currentTimeMillis();
+
+    public ResponseEntity<ProductResponseContainerDTO> createProduct(ProductRequestDTO productRequestDTO) {
         LOGGER.debug("CREAR");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
+        ProductResponseContainerDTO responseContainer = new ProductResponseContainerDTO();
         try {
             ProductDTO response = productAdminService.create(productRequestDTO);
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
+            responseContainer.product(response);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
         } catch (Exception e) {
             LOGGER.error(String.format("Ocurrio un error al crear el producto: \"%s\" ", productRequestDTO)
                     , e);
-            return buildErrorResponse(responseContainer, HttpStatus.BAD_REQUEST, e, "A1", start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
-    public ResponseEntity<ResponseContainerDTO> createCategory(CategoryRequestDTO categoryRequestDTO) {
-        Long start = System.currentTimeMillis();
+
+    @Override
+    public ResponseEntity<EmptyResponseDTO> deleteCategory(Long categoryId) {
+        LOGGER.debug("BORRAR");
+        EmptyResponseDTO responseContainer = new EmptyResponseDTO();
+        try {
+            categoryAdminService.delete(categoryId);
+            EmptyResponseDTO response = new EmptyResponseDTO();
+            response.setDate(OffsetDateTime.now());
+            return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
+        } catch (Exception e) {
+            LOGGER.error("Ocurrio un error al eliminar categoria");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
+        }
+    }
+
+
+    @Override
+    public ResponseEntity<EmptyResponseDTO> deleteProduct(Long productId) {
+        LOGGER.debug("BORRAR");
+        EmptyResponseDTO responseContainer = new EmptyResponseDTO();
+        try {
+            productAdminService.delete(productId);
+            //responseContainer.setType("Delete");
+            responseContainer.setDate(OffsetDateTime.now());
+            return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
+        } catch (Exception e) {
+            LOGGER.error("Ocurrio un error al eliminar producto");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
+        }
+    }
+
+
+    public ResponseEntity<CategoryResponseContainerDTO> createCategory(CategoryRequestDTO categoryRequestDTO) {
         LOGGER.debug("CREAR");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
+        CategoryResponseContainerDTO responseContainer = new CategoryResponseContainerDTO();
         try {
             CategoryDTO response = categoryAdminService.create(categoryRequestDTO);
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
+            responseContainer.category(response);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
         } catch (Exception e) {
             LOGGER.error(String.format("Ocurrio un error al crear la categoria: \"%s\" ", categoryRequestDTO)
                     , e);
-            return buildErrorResponse(responseContainer, HttpStatus.BAD_REQUEST, e, "A1", start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
-    public ResponseEntity<ResponseContainerDTO> getAllProducts() {
-        Long start = System.currentTimeMillis();
+
+
+    public ResponseEntity<ProductListResponseContainerDTO> getAllProducts() {
         LOGGER.debug("LISTAR PRODUCTO");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
-        try{
+        ProductListResponseContainerDTO responseContainer = new ProductListResponseContainerDTO();
+        try {
             List<ProductDTO> listProduct = productAdminService.getAll();
-            ProductListDTO response = new ProductListDTO();
-            response.setItems(listProduct);
-            responseContainer.data(response);
+            responseContainer.products(listProduct);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
-        } catch (Exception e){
-            LOGGER.error("Ocurrio un error al listar productos",e);
-            return buildErrorResponse(responseContainer,HttpStatus.NOT_IMPLEMENTED,e,"A2",start);
+        } catch (Exception e) {
+            LOGGER.error("Ocurrio un error al listar productos", e);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
-    public ResponseEntity<ResponseContainerDTO> getAllCategory() {
-        Long start = System.currentTimeMillis();
+
+
+    public ResponseEntity<CategoryListResponseContainerDTO> getAllCategory() {
         LOGGER.debug("LISTAR CATEGORIAS");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
-        try{
+        CategoryListResponseContainerDTO responseContainer = new CategoryListResponseContainerDTO();
+        try {
             List<CategoryDTO> listCategory = categoryAdminService.getAll();
-            CategoryListDTO response = new CategoryListDTO();
-            response.setItems(listCategory);
-            responseContainer.data(response);
+            responseContainer.categories(listCategory);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
-        } catch (Exception e){
-            LOGGER.error("Ocurrio un error al listar categorias",e);
-            return buildErrorResponse(responseContainer,HttpStatus.NOT_IMPLEMENTED,e,"A2",start);
+        } catch (Exception e) {
+            LOGGER.error("Ocurrio un error al listar categorias", e);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
-    public ResponseEntity<ResponseContainerDTO> getCategory(Long categoryId) {
-        Long start = System.currentTimeMillis();
+
+    public ResponseEntity<CategoryResponseContainerDTO> getCategory(Long categoryId) {
         LOGGER.trace("BUSQUEDA POR ID");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
-        try{
-           CategoryDTO response = categoryAdminService.get(categoryId);
-           responseContainer.data(response);
-           responseContainer.setMeta(buildMeta(start));
-           return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
-        }catch (Exception e) {
+        CategoryResponseContainerDTO responseContainer = new CategoryResponseContainerDTO();
+        try {
+            CategoryDTO response = categoryAdminService.get(categoryId);
+            responseContainer.category(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
+        } catch (Exception e) {
             LOGGER.error("Ocurrio un error al buscar categoria", e);
-            return buildErrorResponse(responseContainer, HttpStatus.NO_CONTENT, e, "A2", start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
 
-    public ResponseEntity<ResponseContainerDTO> getProduct(Long productId) {
-        Long start = System.currentTimeMillis();
+    public ResponseEntity<ProductResponseContainerDTO> getProduct(Long productId) {
         LOGGER.trace("BUSQUEDA POR ID");
-        ResponseContainerDTO responseContainer = new ResponseContainerDTO();
-        try{
+        ProductResponseContainerDTO responseContainer = new ProductResponseContainerDTO();
+        try {
             ProductDTO response = productAdminService.get(productId);
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
+            responseContainer.product(response);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
-        }catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Ocurrio un error al buscar producto", e);
-            return buildErrorResponse(responseContainer, HttpStatus.NO_CONTENT, e, "A2", start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
 
-    public ResponseEntity<ResponseContainerDTO> updateCategory(Long categoryId, CategoryDTO categoryDTO) {
-        Long start = System.currentTimeMillis();
+
+    public ResponseEntity<CategoryResponseContainerDTO> updateCategory(Long categoryId, CategoryDTO categoryDTO) {
         LOGGER.debug("UPDATE");
-        ResponseContainerDTO responseContainer =  new ResponseContainerDTO();
+        CategoryResponseContainerDTO responseContainer = new CategoryResponseContainerDTO();
         //Validamos que el id que estamos buscando sea el mismo al que vamos a actualizar desde swagger
-        if(!Objects.equals(categoryId, categoryDTO.getId())){
+        if (!Objects.equals(categoryId, categoryDTO.getId())) {
             //Si son distintos lo inforamos en un LOG
             LOGGER.error("El id que busca es distinto a la categoria que quiere actualizar");
-            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,null,"A2",start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
-        try{
+        try {
             CategoryDTO response = categoryAdminService.update(categoryDTO);
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
+            responseContainer.category(response);
             return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Ocurrio un error al actualizar category");
-            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,e,"A2",start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
 
-    public ResponseEntity<ResponseContainerDTO> updateProduct(Long productId, ProductDTO productDTO) {
-        Long start = System.currentTimeMillis();
+    @Override
+    public ResponseEntity<ProductResponseContainerDTO> updateProduct(Long productId, ProductDTO productDTO) {
         LOGGER.debug("UPDATE");
-        ResponseContainerDTO responseContainer =  new ResponseContainerDTO();
+        ProductResponseContainerDTO responseContainer = new ProductResponseContainerDTO();
         //Validamos que el id que estamos buscando sea el mismo al que vamos a actualizar desde swagger
-        if(!Objects.equals(productId, productDTO.getId())){
+        if (!Objects.equals(productId, productDTO.getId())) {
             //Si son distintos lo inforamos en un LOG
             LOGGER.error("El id que busca es distinto al producto que quiere actualizar");
-            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,null,"A2",start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
-        try{
+        try {
             ProductDTO response = productAdminService.update(productDTO);
-            responseContainer.data(response);
-            responseContainer.setMeta(buildMeta(start));
+            responseContainer.product(response);
             return ResponseEntity.status(HttpStatus.OK).body(responseContainer);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Ocurrio un error al actualizar producto");
-            return buildErrorResponse(responseContainer,HttpStatus.BAD_REQUEST,e,"A2",start);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
-
-    public ResponseEntity<EmptyResponseDTO> deleteCategory(Long categoryId) {
-        return ProductsApiDelegate.super.deleteCategory(categoryId);
-    }
-
-    public ResponseEntity<EmptyResponseDTO> deleteProduct(Long productId) {
-        return ProductsApiDelegate.super.deleteProduct(productId);
-    }
-
-
-
 
 }

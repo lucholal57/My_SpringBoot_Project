@@ -1,9 +1,9 @@
 package com.SpringBootProject.app.Service.MapperProduct;
 
 import com.SpringBootProject.app.Entity.ProductEntity;
-import com.SpringBootProject.app.Entity.UserEntity;
 import com.SpringBootProject.app.model.ProductDTO;
 import com.SpringBootProject.app.model.ProductRequestDTO;
+
 
 public interface ProductMapper {
     /*
@@ -20,4 +20,6 @@ public interface ProductMapper {
     ProductDTO mapProduct(final ProductEntity theProduct);
 
     ProductEntity fill (final ProductDTO source, final ProductEntity target);
+
+
 }

@@ -13,10 +13,14 @@ import com.SpringBootProject.app.model.ProductRequestDTO;
 import com.SpringBootProject.app.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public class ProductMapperImpl implements  ProductMapper{
@@ -24,6 +28,7 @@ public class ProductMapperImpl implements  ProductMapper{
     LOGGER
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductMapperImpl.class);
+
     private CategoryMapper categoryMapper;
     private CategoryRepository categoryRepository;
 
@@ -76,7 +81,7 @@ public class ProductMapperImpl implements  ProductMapper{
         response.setName(theProduct.getName());
         response.setPrice(theProduct.getPrice().doubleValue());
         response.setQty(theProduct.getQty());
-        response.setDescription(theProduct.getName());
+        response.setDescription(theProduct.getDescription());
         response.setCategory(categoryMapper.mapCategory(theProduct.getCategory()));
         if (theProduct.getDateCreated() != null) {
             LocalDate createdLocalDate = DateUtils.toLocalDate(theProduct.getDateCreated());
@@ -90,12 +95,13 @@ public class ProductMapperImpl implements  ProductMapper{
         return response;
     }
 
+
+
     public ProductEntity fill (final ProductDTO source, final ProductEntity target){
         target.setName(source.getName());
         target.setDescription(source.getDescription());
         target.setPrice(BigDecimal.valueOf(source.getPrice()));
         target.setQty(source.getQty());
-        target.setCategory(categoryMapper.fill(source.getCategory(),target.getCategory()));
         return target;
     }
 }
