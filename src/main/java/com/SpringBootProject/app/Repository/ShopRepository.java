@@ -1,12 +1,12 @@
 package com.SpringBootProject.app.Repository;
 
-import com.SpringBootProject.app.Entity.CartEntity;
+import com.SpringBootProject.app.Entity.ShopEntity;
 import com.SpringBootProject.app.Entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface CartRepository extends CrudRepository<CartEntity,Long> {
+public interface ShopRepository extends CrudRepository<ShopEntity,Long> {
 
-    Optional<CartEntity> findTopByuser(UserEntity username);
+    Optional<ShopEntity> findTopByuser(UserEntity username);
 }

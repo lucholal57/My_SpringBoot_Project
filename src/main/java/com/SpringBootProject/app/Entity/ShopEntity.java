@@ -2,13 +2,12 @@ package com.SpringBootProject.app.Entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "carts")
-public class CartEntity {
+@Table(name = "shop")
+public class ShopEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,25 +18,24 @@ public class CartEntity {
     private String description;
     @Column(nullable = false)
     private BigDecimal price;
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<CartDetailEntity> cartItems = new ArrayList<>();
+    @ManyToMany
+    private List<ProductEntity> productsSelect;
     @Column(nullable = false)
     private Date date_created;
     @Column(nullable = true)
     private Date date_deleted;
 
-    public CartEntity() {
+    public ShopEntity() {
     }
 
-    public CartEntity(Long id, UserEntity user, String description,
-                      BigDecimal price, List<CartDetailEntity> cartItems,
+    public ShopEntity(Long id, UserEntity user, String description,
+                      BigDecimal price, List<ProductEntity> productsSelect,
                       Date date_created, Date date_deleted) {
         this.id = id;
         this.user = user;
         this.description = description;
         this.price = price;
-        this.cartItems = cartItems;
+        this.productsSelect = productsSelect;
         this.date_created = date_created;
         this.date_deleted = date_deleted;
     }
@@ -74,12 +72,12 @@ public class CartEntity {
         this.price = price;
     }
 
-    public List<CartDetailEntity> getCartItems() {
-        return cartItems;
+    public List<ProductEntity> getProductsSelect() {
+        return productsSelect;
     }
 
-    public void setCartItems(List<CartDetailEntity> cartItems) {
-        this.cartItems = cartItems;
+    public void setProductsSelect(List<ProductEntity> productsSelect) {
+        this.productsSelect = productsSelect;
     }
 
     public Date getDate_created() {
