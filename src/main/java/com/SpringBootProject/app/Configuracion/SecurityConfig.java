@@ -47,10 +47,10 @@ public class SecurityConfig {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(basePath + "/users/**").permitAll();
-        http.authorizeRequests().antMatchers(basePath + "/products/**").permitAll();
+        http.authorizeRequests().antMatchers(basePath + "/products/**").authenticated();
         http.authorizeRequests().antMatchers(basePath + "/carts/**").permitAll();
         http.authorizeRequests().antMatchers(basePath + "/token/login").permitAll();
-        http.authorizeRequests().antMatchers("/swagger-ui/**").permitAll();
+        http.authorizeRequests().antMatchers("/swagger-ui/**").authenticated();
         http.authorizeRequests().anyRequest().permitAll();
         http.addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
