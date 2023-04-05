@@ -595,6 +595,21 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
+    get:
+      tags:
+        - store
+      security:
+        - bearerAuth: [ ]
+      summary: Obtener todas las shop
+      description: EndPoint para obtener todas las shop
+      operationId: getAllShop
+      responses:
+        default:
+          description: operacion exitosa, respuesta de ShopListDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopListResponseContainerDTO'
 
   /token/refresh:
     patch:

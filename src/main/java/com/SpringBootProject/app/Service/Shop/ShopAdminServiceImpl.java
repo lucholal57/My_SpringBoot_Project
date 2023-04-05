@@ -9,6 +9,8 @@ import com.SpringBootProject.app.model.ShopRequestDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ShopAdminServiceImpl implements ShopAdminService{
@@ -23,7 +25,14 @@ public class ShopAdminServiceImpl implements ShopAdminService{
 
     @Override
     public List<ShopDTO> getAll() throws RuntimeException {
-        return null;
+        LOGGER.trace("Lista de shop");
+        Iterable<ShopEntity> shops = shopRepository.findAll();
+        Iterator<ShopEntity> iter = shops.iterator();
+        List<ShopDTO> response = new ArrayList<>();
+        while (iter.hasNext()){
+            response.add(shopMapper.mapShop(iter.next()));
+        }
+        return response;
     }
 
     @Override
