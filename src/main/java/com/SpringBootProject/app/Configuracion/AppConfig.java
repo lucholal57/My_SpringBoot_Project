@@ -2,15 +2,21 @@ package com.SpringBootProject.app.Configuracion;
 
 import com.SpringBootProject.app.Repository.CategoryRepository;
 import com.SpringBootProject.app.Repository.ProductRepository;
+import com.SpringBootProject.app.Repository.ShopRepository;
 import com.SpringBootProject.app.Service.Category.CategoryAdminService;
 import com.SpringBootProject.app.Service.Category.CategoryAdminServiceImpl;
 import com.SpringBootProject.app.Service.MapperCategory.CategoryMapper;
 import com.SpringBootProject.app.Service.MapperCategory.CategoryMapperImpl;
 import com.SpringBootProject.app.Service.MapperProduct.ProductMapper;
 import com.SpringBootProject.app.Service.MapperProduct.ProductMapperImpl;
+import com.SpringBootProject.app.Service.MapperShop.ShopMapper;
+import com.SpringBootProject.app.Service.MapperShop.ShopMapperImpl;
 import com.SpringBootProject.app.Service.Product.ProductAdminService;
 import com.SpringBootProject.app.Service.Product.ProductAdminServiceImpl;
+import com.SpringBootProject.app.Service.Shop.ShopAdminService;
+import com.SpringBootProject.app.Service.Shop.ShopAdminServiceImpl;
 import com.SpringBootProject.app.controller.ProductController;
+import com.SpringBootProject.app.controller.ShopController;
 import com.SpringBootProject.app.controller.TokenController;
 import com.SpringBootProject.app.controller.UserController;
 import com.SpringBootProject.app.Repository.UserRepository;
@@ -48,32 +54,36 @@ public class AppConfig {
     public UserController getUserController(UserAdminService userAdminService) {
         return new UserController(userAdminService);
     }
+
     @Primary
     @Bean
     public UserAdminService getUserAdminService(UserMapper userMapper,
                                                 UserRepository userRepository) {
         return new UserAdminServiceImpl(userMapper, userRepository);
     }
+
     @Bean
-    public UserMapper getUserMapper(PasswordEncoder encoder){
+    public UserMapper getUserMapper(PasswordEncoder encoder) {
         return new UserMapperImpl(encoder);
     }
 
     //Beans de Producto
     @Bean
     public ProductController getProductController(ProductAdminService productAdminService,
-                                                  CategoryAdminService categoryAdminService){
-        return new ProductController(productAdminService,categoryAdminService);
+                                                  CategoryAdminService categoryAdminService) {
+        return new ProductController(productAdminService, categoryAdminService);
     }
+
     @Bean
     public ProductAdminService getProductAdminService(ProductRepository productRepository,
-                                                      ProductMapper productMapper){
+                                                      ProductMapper productMapper) {
         return new ProductAdminServiceImpl(productRepository,
                 productMapper);
     }
+
     @Bean
-    public ProductMapper getProductMapper(CategoryMapper categoryMapper, CategoryRepository categoryRepository){
-        return new ProductMapperImpl(categoryMapper,categoryRepository);
+    public ProductMapper getProductMapper(CategoryMapper categoryMapper, CategoryRepository categoryRepository) {
+        return new ProductMapperImpl(categoryMapper, categoryRepository);
     }
 
     //Beans de Category
@@ -81,17 +91,34 @@ public class AppConfig {
     public CategoryMapper getCategoryMapper(CategoryRepository categoryRepository) {
         return new CategoryMapperImpl(categoryRepository);
     }
+
     @Bean
     public CategoryAdminService getCategoryAdminService(CategoryRepository categoryRepository,
-                                                        CategoryMapper categoryMapper){
-        return new CategoryAdminServiceImpl(categoryRepository,categoryMapper);
+                                                        CategoryMapper categoryMapper) {
+        return new CategoryAdminServiceImpl(categoryRepository, categoryMapper);
+    }
+
+    @Bean
+    public ShopController getShopController(ShopAdminService shopAdminService) {
+        return new ShopController(shopAdminService);
+    }
+
+    @Bean
+    public ShopAdminService getShopAdminService(ShopRepository shopRepository, ShopMapper shopMapper) {
+        return new ShopAdminServiceImpl(shopRepository, shopMapper);
+    }
+
+    @Bean
+    public ShopMapper getShopMapper(ShopRepository shopRepository, UserMapper userMapper, ProductMapper productMapper) {
+        return new ShopMapperImpl(shopRepository, userMapper, productMapper);
     }
 
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public TokenController getTokenController(UserAuthService userAuthService,
                                               JWTService jwtService) {
@@ -113,7 +140,6 @@ public class AppConfig {
     public UserDetailsService getUserDetailService(UserRepository userRepository) {
         return new UserDetailServiceImpl(userRepository);
     }
-
 
 
 }

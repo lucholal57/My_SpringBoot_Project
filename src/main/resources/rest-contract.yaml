@@ -591,7 +591,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShopDTO'
+                $ref: '#/components/schemas/ShopResponseContainerDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -975,6 +975,20 @@ components:
       properties:
         user:
           $ref: "#/components/schemas/UserDTO"
+
+    ShopResponseContainerDTO:
+      type: object
+      properties:
+        shop:
+          $ref: "#/components/schemas/ShopDTO"
+
+    ShopListResponseContainerDTO:
+      type: object
+      properties:
+        shops:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShopDTO"
 
     UserRoleListResponseContainerDTO:
       type: object
