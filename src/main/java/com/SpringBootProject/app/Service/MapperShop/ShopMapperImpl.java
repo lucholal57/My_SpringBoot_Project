@@ -68,6 +68,7 @@ public class ShopMapperImpl implements ShopMapper {
         Iterable<ProductDTO> Iproducts = theShop.getProducts();
         Iterator<ProductDTO> iter = Iproducts.iterator();
         List<ProductEntity> listProducts = new ArrayList<>();
+
         while (iter.hasNext()) {
             ProductDTO productoPrice = iter.next();
             listProducts.add(productMapper.mapProduct(productoPrice));
