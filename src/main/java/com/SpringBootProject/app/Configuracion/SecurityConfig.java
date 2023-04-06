@@ -48,7 +48,7 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(basePath + "/users/**").permitAll();
         http.authorizeRequests().antMatchers(basePath + "/products/**").permitAll();
-        http.authorizeRequests().antMatchers(basePath + "/carts/**").permitAll();
+        http.authorizeRequests().antMatchers(basePath + "/shops/**").permitAll();
         http.authorizeRequests().antMatchers(basePath + "/token/login").permitAll();
         http.authorizeRequests().antMatchers("/swagger-ui/**").permitAll();
         http.authorizeRequests().anyRequest().permitAll();

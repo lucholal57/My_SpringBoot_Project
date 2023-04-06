@@ -115,6 +115,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserResponseContainerDTO'
 
+  /users/user/:
+    get:
+      tags:
+        - user
+      summary: Buscar usuarios por nombre o correo electrónico
+      operationId: searchUsers
+      parameters:
+        - name: query
+          in: query
+          description: Nombre o correo electrónico del usuario a buscar
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuarios encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseContainerDTO'
+        '404':
+          description: Usuarios no encontrados
+
     #Put para la edicion de un usuario pasando id
     put:
       tags:

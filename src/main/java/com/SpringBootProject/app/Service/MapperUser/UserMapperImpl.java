@@ -33,6 +33,7 @@ public class UserMapperImpl implements UserMapper {
         response.setEmail(theUser.getEmail());
         response.setFirstName(theUser.getFirstName());
         response.setLastName(theUser.getLastName());
+        response.setRole(RoleEnum.valueOf(theUser.getRole().getValue()));
         if(theUser.getDateCreated() != null) {
             response.setDateCreated(DateUtils.toDate(theUser.getDateCreated()));
         }
@@ -51,6 +52,10 @@ public class UserMapperImpl implements UserMapper {
         response.setEmail(theUser.getEmail());
         response.setFirstName(theUser.getFirstName());
         response.setLastName(theUser.getLastName());
+        /* Esta linea no funciona solo me traer el ROLE_USER, cuando al parecer no encuentra ROLE_ADMIN
+        response.setRole(UserDTO.RoleEnum.valueOf(theUser.getRole().toString()));
+         */
+
         if(theUser.getDateCreated() != null) {
             LocalDate createLocalDate = DateUtils.toLocalDate(theUser.getDateCreated());
             response.setDateCreated(createLocalDate);
@@ -68,6 +73,7 @@ public class UserMapperImpl implements UserMapper {
         response.setEmail(theUser.getEmail());
         response.setFirstName(theUser.getFirstName());
         response.setLastName(theUser.getLastName());
+        response.setRole(RoleEnum.valueOf(theUser.getRole().getValue()));
         if(theUser.getDateCreated() != null) {
             response.setDateCreated(DateUtils.toDate(theUser.getDateCreated()));
         }
@@ -104,6 +110,7 @@ public class UserMapperImpl implements UserMapper {
         target.setFirstName(source.getFirstName());
         target.setLastName(source.getLastName());
         target.setEmail(source.getEmail());
+        target.setRole(RoleEnum.valueOf(source.getRole().getValue()));
         return target;
     }
 

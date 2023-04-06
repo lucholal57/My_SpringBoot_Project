@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /*
 Esta clase user controler va a ser la encarcada de trabajar con las peticiones. Extiende de una clase BASE
@@ -60,10 +62,14 @@ public class UserController implements UsersApiDelegate {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
+
+
     @Override
     public ResponseEntity<EmptyResponseDTO> removeRoleToUser(Long userId, Long roleId) {
         return UsersApiDelegate.super.removeRoleToUser(userId, roleId);
     }
+
+
 
     public ResponseEntity<UserListResponseContainerDTO> getAllUser() {
         LOGGER.debug("LISTAR USUARIO");
@@ -76,6 +82,22 @@ public class UserController implements UsersApiDelegate {
             LOGGER.error("Ocurrio un error al listar usuarios", e);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
 
+        }
+    }
+
+
+    @Override
+    public ResponseEntity<UserResponseContainerDTO> searchUsers(String query) {
+        LOGGER.trace("BUSQUEDA POR ID");
+        UserResponseContainerDTO responseContainer = new UserResponseContainerDTO();
+        try {
+            Optional<UserDTO> responseOpt = userAdminService.findByUsername(query);
+            UserDTO response = responseOpt.get();
+            responseContainer.user(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseContainer);
+        } catch (Exception e) {
+            LOGGER.error("Ocurrio un error al buscar usuario", e);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseContainer);
         }
     }
 

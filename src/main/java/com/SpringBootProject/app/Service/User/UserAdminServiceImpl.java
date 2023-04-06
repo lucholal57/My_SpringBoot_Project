@@ -112,4 +112,15 @@ public class UserAdminServiceImpl implements UserAdminService {
         UserEntity user = optionalUser.get();
         userRepository.delete(user);
     }
+
+    @Override
+    public Optional<UserDTO> findByUsername(String username) {
+        LOGGER.trace("Busqueda de usuario por username");
+        //Usamos optional User por que puede o no encontrar el Usuario
+        Optional<UserEntity> optionalUser = userRepository.findOneByUsername(username);
+        //Parseamos el optionalUser a User entiti para devolverlo
+        UserEntity user = optionalUser.orElseThrow(NoSuchElementException::new);
+        //Mapeamos de UserEntity a UserDTO para devolver la respuesta
+        return Optional.ofNullable(userMapper.mapUser(user));
+    }
 }
